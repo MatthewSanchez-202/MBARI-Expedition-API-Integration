@@ -1199,39 +1199,7 @@ create table CamlogLoad
 )
 go
 
-create trigger dTR_History_CamlogLoad
-    on CamlogLoad
-    for delete
-    as
--- missing source code
-go
 
-create trigger iTR_History_CamlogLoad
-    on CamlogLoad
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_CamlogLoad
-    on CamlogLoad
-    for update
-    as
--- missing source code
-go
-
-create trigger uTR_isLoaded_Update
-    on CamlogLoad
-    for update
-    as
--- missing source code
-go
-
-grant select on CamlogLoad to DB_EXPD_Users
-go
-
-grant select on CamlogLoad to [public]
-go
 
 create table CfgFileMonitorService
 (
@@ -1259,34 +1227,6 @@ create table CleanRovNavLoad
     actionDescription varchar(256),
     comment           varchar(2048)
 )
-go
-
-create trigger dTR_History_CleanNavLoad
-    on CleanRovNavLoad
-    for delete
-    as
--- missing source code
-go
-
-create trigger iTR_History_CleanNavLoad
-    on CleanRovNavLoad
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_CleanNavLoad
-    on CleanRovNavLoad
-    for update
-    as
--- missing source code
-go
-
-create trigger uTR_isCleanNavLoaded_Update
-    on CleanRovNavLoad
-    for update
-    as
--- missing source code
 go
 
 create table CleanRovnavData_1988
@@ -2880,54 +2820,8 @@ create index ExpdID_FK
     with (fillfactor = 90)
 go
 
-create trigger dTR_History_Dive
-    on Dive
-    for delete
-    as
--- missing source code
-go
 
-create trigger iTR_History_Dive
-    on Dive
-    for insert
-    as
--- missing source code
-go
 
-create trigger tgr_Delete_Dive
-    on Dive
-    for delete
-    as
--- missing source code
-go
-
-create trigger tgr_Insert_Dive
-    on Dive
-    for insert
-    as
--- missing source code
-go
-
-create trigger trgr_dive_insert_update_divetime
-    on Dive
-    for insert, update
-    as
--- missing source code
-go
-
-create trigger trgr_dive_insert_update_rovname
-    on Dive
-    for insert, update
-    as
--- missing source code
-go
-
-create trigger uTR_History_Dive
-    on Dive
-    for update
-    as
--- missing source code
-go
 
 create table DiveSummary
 (
@@ -2977,26 +2871,6 @@ create table DiveSummary
 )
 go
 
-create trigger dTR_History_DiveSummary
-    on DiveSummary
-    for delete
-    as
--- missing source code
-go
-
-create trigger iTR_History_DiveSummary
-    on DiveSummary
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_DiveSummary
-    on DiveSummary
-    for update
-    as
--- missing source code
-go
 
 create table DocRickettsPilotsDive
 (
@@ -3043,9 +2917,6 @@ create table DocRickettsRawCtdData_2008
         constraint PK_DocRickettsRawCtdData_2008_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2008
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2008_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3078,9 +2949,6 @@ create table DocRickettsRawCtdData_2009
         constraint PK_DocRickettsRawCtdData_2009_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2009
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2009_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3109,9 +2977,6 @@ create table DocRickettsRawCtdData_2010
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2010_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2010
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2010_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3142,9 +3007,6 @@ create table DocRickettsRawCtdData_2011
         constraint PK_DocRickettsRawCtdData_2011_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2011
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2011_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3173,9 +3035,6 @@ create table DocRickettsRawCtdData_2012
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2012_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2012
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2012_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3206,9 +3065,6 @@ create table DocRickettsRawCtdData_2013
         constraint PK_DocRickettsRawCtdData_2013_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2013
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2013_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3237,9 +3093,6 @@ create table DocRickettsRawCtdData_2014
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2014_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2014
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2014_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3270,9 +3123,6 @@ create table DocRickettsRawCtdData_2015
         constraint PK_DocRickettsRawCtdData_2015_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2015
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2015_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3301,9 +3151,6 @@ create table DocRickettsRawCtdData_2016
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2016_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2016
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2016_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3337,9 +3184,6 @@ create table DocRickettsRawCtdData_2017
         constraint PK_DocRickettsRawCtdData_2017_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2017
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2017_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3368,9 +3212,6 @@ create table DocRickettsRawCtdData_2018
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2018_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2018
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2018_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3401,9 +3242,6 @@ create table DocRickettsRawCtdData_2019
         constraint PK_DocRickettsRawCtdData_2019_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2019
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2019_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3432,9 +3270,6 @@ create table DocRickettsRawCtdData_2020
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2020_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2020
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2020_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3465,9 +3300,6 @@ create table DocRickettsRawCtdData_2021
         constraint PK_DocRickettsRawCtdData_2021_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2021
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2021_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3496,9 +3328,6 @@ create table DocRickettsRawCtdData_2022
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2022_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2022
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2022_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3529,9 +3358,6 @@ create table DocRickettsRawCtdData_2023
         constraint PK_DocRickettsRawCtdData_2023_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2023
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2023_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3560,9 +3386,6 @@ create table DocRickettsRawCtdData_2024
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2024_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2024
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2024_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3593,9 +3416,7 @@ create table DocRickettsRawCtdData_2025
         constraint PK_DocRickettsRawCtdData_2025_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2025
-            unique clustered
-                with (fillfactor = 90)
+
         constraint CK_DocRickettsRawCtdData_2025_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3624,9 +3445,6 @@ create table DocRickettsRawCtdData_2026
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2026_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2026
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2026_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3657,9 +3475,6 @@ create table DocRickettsRawCtdData_2027
         constraint PK_DocRickettsRawCtdData_2027_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2027
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2027_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3688,9 +3503,6 @@ create table DocRickettsRawCtdData_2028
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2028_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2028
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2028_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3721,9 +3533,6 @@ create table DocRickettsRawCtdData_2029
         constraint PK_DocRickettsRawCtdData_2029_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2029
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2029_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -3752,9 +3561,6 @@ create table DocRickettsRawCtdData_2030
     DatetimeGMT datetime not null
         constraint PK_DocRickettsRawCtdData_2030_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_DocRickettsRawCtdData_2030
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_DocRickettsRawCtdData_2030_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -3845,40 +3651,7 @@ create index IDX_Expd_ChfSci_StartDtg
     with (fillfactor = 90)
 go
 
-create trigger dTR_History_Expedition
-    on Expedition
-    for delete
-    as
--- missing source code
-go
 
-create trigger iTR_History_Expedition
-    on Expedition
-    for insert
-    as
--- missing source code
-go
-
-create trigger trgr_expedition_insert_update
-    on Expedition
-    for insert, update
-    as
--- missing source code
-go
-
-create trigger trgr_expedition_insert_update_shipname
-    on Expedition
-    for insert, update
-    as
--- missing source code
-go
-
-create trigger uTR_History_Expedition
-    on Expedition
-    for update
-    as
--- missing source code
-go
 
 create table ExpeditionConflict
 (
@@ -3929,12 +3702,6 @@ create table ExpeditionData
 )
 go
 
-create trigger trgr_expeditiondata_insert_update_rovname
-    on ExpeditionData
-    for insert, update
-    as
--- missing source code
-go
 
 create table Expedition_Mike
 (
@@ -4825,33 +4592,7 @@ create table LegacyCamlogLoad
 )
 go
 
-create trigger dTR_History_LegacyCamlogLoad
-    on LegacyCamlogLoad
-    for delete
-    as
--- missing source code
-go
 
-create trigger iTR_History_LegacyCamlogLoad
-    on LegacyCamlogLoad
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_LegacyCamlogLoad
-    on LegacyCamlogLoad
-    for update
-    as
--- missing source code
-go
-
-create trigger uTR_isLegacyCamlogLoaded_Update
-    on LegacyCamlogLoad
-    for update
-    as
--- missing source code
-go
 
 create table MinirovLogfiles
 (
@@ -4876,26 +4617,7 @@ create table MinirovLogfiles
 )
 go
 
-create trigger dTR_History_MinirovLogfiles
-    on MinirovLogfiles
-    for delete
-    as
--- missing source code
-go
 
-create trigger iTR_History_MinirovLogfiles
-    on MinirovLogfiles
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_MinirovLogfiles
-    on MinirovLogfiles
-    for update
-    as
--- missing source code
-go
 
 create table MinirovRawCtdData_2012
 (
@@ -6228,40 +5950,9 @@ create table MinirovRawCtdLoad
 )
 go
 
-create trigger dTR_History_MinirovRawCtdLoad
-    on MinirovRawCtdLoad
-    for delete
-    as
--- missing source code
-go
 
-create trigger iTR_History_MinirovRawCtdLoad
-    on MinirovRawCtdLoad
-    for insert
-    as
--- missing source code
-go
 
-create trigger uTR_History_MinirovRawCtdLoad
-    on MinirovRawCtdLoad
-    for update
-    as
--- missing source code
-go
 
-create trigger uTR_isMinirovRawCtdLoaded_Update
-    on MinirovRawCtdLoad
-    for update
-    as
--- missing source code
-go
-
-create trigger uTR_isMinirovRawCtdProcessed_Update
-    on MinirovRawCtdLoad
-    for update
-    as
--- missing source code
-go
 
 create table MinirovRawDvlLoad
 (
@@ -6289,26 +5980,6 @@ create table MinirovRawDvlLoad
 )
 go
 
-create trigger dTR_History_MinirovRawDvlLoad
-    on MinirovRawDvlLoad
-    for delete
-    as
--- missing source code
-go
-
-create trigger iTR_History_MinirovRawDvlLoad
-    on MinirovRawDvlLoad
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_MinirovRawDvlLoad
-    on MinirovRawDvlLoad
-    for update
-    as
--- missing source code
-go
 
 create table MinirovRawNavLoad
 (
@@ -6336,26 +6007,7 @@ create table MinirovRawNavLoad
 )
 go
 
-create trigger dTR_History_MinirovRawNavLoad
-    on MinirovRawNavLoad
-    for delete
-    as
--- missing source code
-go
 
-create trigger iTR_History_MinirovRawNavLoad
-    on MinirovRawNavLoad
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_MinirovRawNavLoad
-    on MinirovRawNavLoad
-    for update
-    as
--- missing source code
-go
 
 create table MinirovRawRovLoad
 (
@@ -6383,26 +6035,8 @@ create table MinirovRawRovLoad
 )
 go
 
-create trigger dTR_History_MinirovRawRovLoad
-    on MinirovRawRovLoad
-    for delete
-    as
--- missing source code
-go
 
-create trigger iTR_History_MinirovRawRovLoad
-    on MinirovRawRovLoad
-    for insert
-    as
--- missing source code
-go
 
-create trigger uTR_History_MinirovRawRovLoad
-    on MinirovRawRovLoad
-    for update
-    as
--- missing source code
-go
 
 create table O2AtSigmaTheta
 (
@@ -6431,11 +6065,6 @@ create table OLDCalendar
 )
 go
 
-grant select on OLDCalendar to DB_EXPD_Users
-go
-
-grant select on OLDCalendar to [public]
-go
 
 create table ObsLog
 (
@@ -6529,26 +6158,9 @@ create table PersonGroup
 )
 go
 
-create trigger del_91D2246348524C08A82D86EAFF4779BF
-    on PersonGroup
-    for delete
-    as
--- missing source code
-go
 
-create trigger ins_91D2246348524C08A82D86EAFF4779BF
-    on PersonGroup
-    for insert
-    as
--- missing source code
-go
 
-create trigger upd_91D2246348524C08A82D86EAFF4779BF
-    on PersonGroup
-    for update
-    as
--- missing source code
-go
+
 
 create table PlatformLookup
 (
@@ -6610,40 +6222,8 @@ create table RawCtdLoad
 )
 go
 
-create trigger dTR_History_RawCtdLoad
-    on RawCtdLoad
-    for delete
-    as
--- missing source code
-go
 
-create trigger iTR_History_RawCtdLoad
-    on RawCtdLoad
-    for insert
-    as
--- missing source code
-go
 
-create trigger uTR_History_RawCtdLoad
-    on RawCtdLoad
-    for update
-    as
--- missing source code
-go
-
-create trigger uTR_isRawCtdLoaded_Update
-    on RawCtdLoad
-    for update
-    as
--- missing source code
-go
-
-create trigger uTR_isRawCtdProcessed_Update
-    on RawCtdLoad
-    for update
-    as
--- missing source code
-go
 
 create table RawRovNavLoad
 (
@@ -6665,33 +6245,6 @@ create table RawRovNavLoad
 )
 go
 
-create trigger dTR_History_RawNavLoad
-    on RawRovNavLoad
-    for delete
-    as
--- missing source code
-go
-
-create trigger iTR_History_RawNavLoad
-    on RawRovNavLoad
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_RawNavLoad
-    on RawRovNavLoad
-    for update
-    as
--- missing source code
-go
-
-create trigger uTR_isRawRovNavLoaded_Update
-    on RawRovNavLoad
-    for update
-    as
--- missing source code
-go
 
 create table RawRovnavData_1988
 (
@@ -8261,33 +7814,7 @@ create table RawShipNavLoad
 )
 go
 
-create trigger dTR_History_RawShipNavLoad
-    on RawShipNavLoad
-    for delete
-    as
--- missing source code
-go
 
-create trigger iTR_History_RawShipNavLoad
-    on RawShipNavLoad
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_RawShipNavLoad
-    on RawShipNavLoad
-    for update
-    as
--- missing source code
-go
-
-create trigger uTR_isRawShipNavLoaded_Update
-    on RawShipNavLoad
-    for update
-    as
--- missing source code
-go
 
 create table RawShipnavData_1988
 (
@@ -9725,12 +9252,6 @@ create table RovCtdCfg
 )
 go
 
-create trigger trgr_update_rovctdcfg_localtimes
-    on RovCtdCfg
-    for update
-    as
--- missing source code
-go
 
 create table RovCtdCfg_DocRicketts
 (
@@ -9778,34 +9299,6 @@ create table RovCtdLoad
     actionDescription varchar(256),
     comment           varchar(2048)
 )
-go
-
-create trigger dTR_History_RovCtdLoad
-    on RovCtdLoad
-    for delete
-    as
--- missing source code
-go
-
-create trigger iTR_History_RovCtdLoad
-    on RovCtdLoad
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_RovCtdLoad
-    on RovCtdLoad
-    for update
-    as
--- missing source code
-go
-
-create trigger uTR_isRovCtdLoaded_Update
-    on RovCtdLoad
-    for update
-    as
--- missing source code
 go
 
 create table RovctdBinData_1988
@@ -14731,9 +14224,6 @@ create table VentanaRawCtdData_2008
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2008_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2008
-            unique clustered
                 with (fillfactor = 90),
     EpochSecs   int,
     LoadID_FK   int      not null,
@@ -14758,9 +14248,6 @@ create table VentanaRawCtdData_2009
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2009_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2009
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2009_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -14790,9 +14277,6 @@ create table VentanaRawCtdData_2010
         constraint PK_VentanaRawCtdData_2010_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2010
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2010_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -14820,9 +14304,6 @@ create table VentanaRawCtdData_2011
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2011_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2011
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2011_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -14852,9 +14333,6 @@ create table VentanaRawCtdData_2012
         constraint PK_VentanaRawCtdData_2012_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2012
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2012_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -14882,9 +14360,6 @@ create table VentanaRawCtdData_2013
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2013_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2013
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2013_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -14914,9 +14389,6 @@ create table VentanaRawCtdData_2014
         constraint PK_VentanaRawCtdData_2014_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2014
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2014_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -14944,9 +14416,6 @@ create table VentanaRawCtdData_2015
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2015_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2015
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2015_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -14976,9 +14445,6 @@ create table VentanaRawCtdData_2016
         constraint PK_VentanaRawCtdData_2016_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2016
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2016_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -15006,9 +14472,6 @@ create table VentanaRawCtdData_2017
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2017_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2017
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2017_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -15038,9 +14501,6 @@ create table VentanaRawCtdData_2018
         constraint PK_VentanaRawCtdData_2018_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2018
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2018_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -15068,9 +14528,6 @@ create table VentanaRawCtdData_2019
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2019
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2019
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2019_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -15100,9 +14557,6 @@ create table VentanaRawCtdData_2020
         constraint PK_VentanaRawCtdData_2020
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2020
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2020_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -15130,9 +14584,6 @@ create table VentanaRawCtdData_2021
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2021
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2021
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2021_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -15162,9 +14613,6 @@ create table VentanaRawCtdData_2022
         constraint PK_VentanaRawCtdData_2022
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2022
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2022_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -15192,9 +14640,6 @@ create table VentanaRawCtdData_2023
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2023
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2023
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2023_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -15224,9 +14669,6 @@ create table VentanaRawCtdData_2024
         constraint PK_VentanaRawCtdData_2024
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2024
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2024_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -15254,9 +14696,6 @@ create table VentanaRawCtdData_2025
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2025_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2025
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2025_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -15286,9 +14725,6 @@ create table VentanaRawCtdData_2026
         constraint PK_VentanaRawCtdData_2026_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2026
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2026_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -15316,9 +14752,6 @@ create table VentanaRawCtdData_2027
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2027_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2027
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2027_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -15348,9 +14781,6 @@ create table VentanaRawCtdData_2028
         constraint PK_VentanaRawCtdData_2028_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2028
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2028_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -15379,9 +14809,6 @@ create table VentanaRawCtdData_2029
         constraint PK_VentanaRawCtdData_2029_1
             primary key nonclustered
                 with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2029
-            unique clustered
-                with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2029_DTGRange
             check (DatetimeGMT IS NOT NULL),
     EpochSecs   int,
@@ -15409,9 +14836,6 @@ create table VentanaRawCtdData_2030
     DatetimeGMT datetime not null
         constraint PK_VentanaRawCtdData_2030_1
             primary key nonclustered
-                with (fillfactor = 90)
-        constraint IX_VentanaRawCtdData_2030
-            unique clustered
                 with (fillfactor = 90)
         constraint CK_VentanaRawCtdData_2030_DTGRange
             check (DatetimeGMT IS NOT NULL),
@@ -15464,26 +14888,6 @@ create unique index index_667149422
     with (fillfactor = 90)
 go
 
-create trigger dTR_History_Waypoint
-    on Waypoint
-    for delete
-    as
--- missing source code
-go
-
-create trigger iTR_History_Waypoint
-    on Waypoint
-    for insert
-    as
--- missing source code
-go
-
-create trigger uTR_History_Waypoint
-    on Waypoint
-    for update
-    as
--- missing source code
-go
 
 create table ctdder
 (
@@ -15618,776 +15022,4 @@ create table tmp1
 )
 go
 
-create view CleanRovnavData as
--- missing source code
-go
-
-grant select on CleanRovnavData to [public]
-go
-
-create view DocRickettsCamlogData as
--- missing source code
-go
-
-create view DocRickettsCleanNavData as
--- missing source code
-go
-
-grant select on DocRickettsCleanNavData to [public]
-go
-
-create view DocRickettsRawNavData as
--- missing source code
-go
-
-create view DocRickettsRovctdBinData as
--- missing source code
-go
-
-create view DocRickettsRovctdData as
--- missing source code
-go
-
-create view ExpdDataView as
--- missing source code
-go
-
-grant select on ExpdDataView to [public]
-go
-
-create view MSmerge_contents_Person as
--- missing source code
-go
-
-create view MinirovCleanNavData as
--- missing source code
-go
-
-create view MinirovRawCtdData as
--- missing source code
-go
-
-create view MinirovRawNavData as
--- missing source code
-go
-
-create view MinirovRovctdBinData as
--- missing source code
-go
-
-create view MinirovRovctdData as
--- missing source code
-go
-
-create view NobadRovctdProcessedBinData as
--- missing source code
-go
-
-create view NobadRovctdProcessedHiFreqData as
--- missing source code
-go
-
-create view OLDPtLobosRawNavData as
--- missing source code
-go
-
-grant select on OLDPtLobosRawNavData to [public]
-go
-
-create view OLDTiburonCleanNavData as
--- missing source code
-go
-
-grant select on OLDTiburonCleanNavData to [public]
-go
-
-create view OLDTiburonRawNavData as
--- missing source code
-go
-
-grant select on OLDTiburonRawNavData to [public]
-go
-
-create view OLDVentanaCleanNavData as
--- missing source code
-go
-
-create view OLDVentanaRawNavData as
--- missing source code
-go
-
-grant select on OLDVentanaRawNavData to [public]
-go
-
-create view OLDWesternFlyerRawNavData as
--- missing source code
-go
-
-create view PtLobosRawNavData as
--- missing source code
-go
-
-grant select on PtLobosRawNavData to [public]
-go
-
-create view RawRovnavData as
--- missing source code
-go
-
-grant select on RawRovnavData to [public]
-go
-
-create view RawShipnavData as
--- missing source code
-go
-
-grant select on RawShipnavData to [public]
-go
-
-create view RecentTiburonCamlogLoads as
--- missing source code
-go
-
-create view RecentVentanaCamlogLoads as
--- missing source code
-go
-
-create view Rovctd as
--- missing source code
-go
-
-exec sp_addextendedproperty 'MS_DiagramPane1', N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[62] 4[14] 2[5] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1[50] 2[25] 3) )"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1 [56] 4 [18] 2))"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "VentanaRovctdBinData"
-            Begin Extent = 
-               Top = 0
-               Left = 38
-               Bottom = 180
-               Right = 198
-            End
-            DisplayFlags = 280
-            TopColumn = 27
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-      RowHeights = 220
-      Begin ColumnWidths = 50
-         Width = 284
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-         Width = 1440
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1170
-         Output = 720
-         Append = 1400
-      ', 'SCHEMA', 'dbo', 'VIEW', 'Rovctd'
-go
-
-exec sp_addextendedproperty 'MS_DiagramPane2', N'   NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 1350
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-', 'SCHEMA', 'dbo', 'VIEW', 'Rovctd'
-go
-
-exec sp_addextendedproperty 'MS_DiagramPaneCount', 2, 'SCHEMA', 'dbo', 'VIEW', 'Rovctd'
-go
-
-create view RovctdCombined as
--- missing source code
-go
-
-create view RovctdProcessedBinData as
--- missing source code
-go
-
-create view RovctdProcessedHiFreqData as
--- missing source code
-go
-
-create view TapeSummary_View as
--- missing source code
-go
-
-create view TiburonCamlogData as
--- missing source code
-go
-
-grant select on TiburonCamlogData to [public]
-go
-
-create view TiburonCleanNavData as
--- missing source code
-go
-
-grant select on TiburonCleanNavData to [public]
-go
-
-create view TiburonRawNavData as
--- missing source code
-go
-
-grant select on TiburonRawNavData to [public]
-go
-
-create view TiburonRovctdBinData as
--- missing source code
-go
-
-create view TiburonRovctdData as
--- missing source code
-go
-
-create view VentanaCamlogData as
--- missing source code
-go
-
-grant select on VentanaCamlogData to [public]
-go
-
-create view VentanaCleanNavData as
--- missing source code
-go
-
-grant select on VentanaCleanNavData to [public]
-go
-
-create view VentanaRawNavData as
--- missing source code
-go
-
-grant select on VentanaRawNavData to [public]
-go
-
-create view VentanaRovctdBinData as
--- missing source code
-go
-
-create view VentanaRovctdData as
--- missing source code
-go
-
-create view VeryOldRovCtd as
--- missing source code
-go
-
-create view WesternFlyerRawNavData as
--- missing source code
-go
-
-grant select on WesternFlyerRawNavData to [public]
-go
-
-create view expdDataTable as
--- missing source code
-go
-
-grant select on expdDataTable to [public]
-go
-
-create view vw_RovctdDive as
--- missing source code
-go
-
-create view waypointview as
--- missing source code
-go
-
-grant select on waypointview to [public]
-go
-
-create or alter function A78(@XT float) returns float as
--- missing source code
-go
-
-grant execute on A78 to [public]
-go
-
-create or alter function Atg(@s float, @t float, @p float) returns float as
--- missing source code
-go
-
-grant execute on Atg to [public]
-go
-
-create or alter function B78(@XT float) returns float as
--- missing source code
-go
-
-grant execute on B78 to [public]
-go
-
-create or alter function BeamAttn(@pct float, @xLen float) returns decimal(9, 4) as
--- missing source code
-go
-
-grant execute on BeamAttn to [public]
-go
-
-create or alter function BeamPercent(@volt float, @xM float, @xB float, @maxBPC float) returns decimal(6, 3) as
--- missing source code
-go
-
-grant execute on BeamPercent to [public]
-go
-
-create or alter function BestO2(@o2 float, @o2alt float, @o2flag tinyint, @o2altflag tinyint) returns decimal(8, 4) as
--- missing source code
-go
-
-grant execute on BestO2 to [public]
-go
-
-create or alter function C78(@XP float) returns float as
--- missing source code
-go
-
-grant execute on C78 to [public]
-go
-
-create or alter function CR2SAL(@CR float, @T float, @P float) returns float as
--- missing source code
-go
-
-grant execute on CR2SAL to [public]
-go
-
-create or alter function DTGToEpochSeconds(@dtg datetime) returns bigint as
--- missing source code
-go
-
-grant execute on DTGToEpochSeconds to [public]
-go
-
-create or alter function Depth(@pres decimal(6, 1), @lat decimal(12, 8)) returns decimal(6, 2) as
--- missing source code
-go
-
-grant execute on Depth to [public]
-go
-
-create or alter function EpochSeconds(@dtg datetime) returns int as
--- missing source code
-go
-
-grant execute on EpochSeconds to [public]
-go
-
-create or alter function EpochSecondsToDTG(@epochsecs int) returns datetime as
--- missing source code
-go
-
-grant execute on EpochSecondsToDTG to [public]
-go
-
-create or alter function O2Uncertainty(@o2 float, @o2alt float, @o2flag tinyint, @o2altflag tinyint) returns decimal(8, 4) as
--- missing source code
-go
-
-grant execute on O2Uncertainty to [public]
-go
-
-create or alter function Oxygen_SBE43(@t float, @p float, @s float, @oc float, @tcor float, @pcor float, @soc float,
-                                      @voff float) returns decimal(6, 4) as
--- missing source code
-go
-
-grant execute on Oxygen_SBE43 to [public]
-go
-
-create or alter function Oxysat(@t float, @s float) returns decimal(7, 4) as
--- missing source code
-go
-
-grant execute on Oxysat to [public]
-go
-
-create or alter function RT35(@T float) returns float as
--- missing source code
-go
-
-grant execute on RT35 to [public]
-go
-
-create or alter function S78(@XR float, @XT float) returns float as
--- missing source code
-go
-
-grant execute on S78 to [public]
-go
-
-create or alter function Salinity(@C float, @T float, @P float) returns decimal(6, 4) as
--- missing source code
-go
-
-grant execute on Salinity to [public]
-go
-
-create or alter function Sigma(@s float, @t float, @p float) returns decimal(6, 4) as
--- missing source code
-go
-
-grant execute on Sigma to [public]
-go
-
-create or alter function SigmaTheta(@s float, @t float, @p float) returns decimal(6, 4) as
--- missing source code
-go
-
-grant execute on SigmaTheta to [public]
-go
-
-create or alter function SoundSpeed(@s float, @t float, @p0 float) returns decimal(9, 3) as
--- missing source code
-go
-
-grant execute on SoundSpeed to [public]
-go
-
-create or alter function Split(@RowData nvarchar(4000), @Delimeter nvarchar(4000)) returns table as
--- missing source code
-go
-
-create or alter function Theta(@s float, @t0 float, @p0 float, @pr float) returns decimal(6, 4) as
--- missing source code
-go
-
-grant execute on Theta to [public]
-go
-
-create or alter function YeardayToEpochSeconds(@year int, @yearday int, @atendofday bit) returns int as
--- missing source code
-go
-
-grant references on YeardayToEpochSeconds to [public]
-go
-
-create or alter procedure calcDepth(@pres float, @lat float) as
--- missing source code
-go
-
-grant execute on calcDepth to [public]
-go
-
-create or alter function closestTibrRawCtd(@target int, @tolerance int) returns int as
--- missing source code
-go
-
-grant execute on closestTibrRawCtd to DB_EXPD_Users
-go
-
-grant execute on closestTibrRawCtd to [public]
-go
-
-create or alter function closestVntaRawCtd(@target int, @tolerance int) returns int as
--- missing source code
-go
-
-grant execute on closestVntaRawCtd to DB_EXPD_Users
-go
-
-grant execute on closestVntaRawCtd to [public]
-go
-
-create or alter function delta(@s1 int, @s2 int) returns int as
--- missing source code
-go
-
-grant execute on delta to [public]
-go
-
-create or alter function deltaf(@s1 float, @s2 float) returns float as
--- missing source code
-go
-
-grant execute on deltaf to [public]
-go
-
-create or alter function diff(@s1 int, @s2 int) returns int as
--- missing source code
-go
-
-grant execute on diff to [public]
-go
-
-create or alter procedure expdPreWebReport(@yr int, @dy int, @ship varchar(4), @dtg varchar(30)) as
--- missing source code
-go
-
-grant execute on expdPreWebReport to [public]
-go
-
-create or alter procedure expdPreWebReportRev2(@yr int, @dy int, @ship varchar(4), @dtg varchar(30)) as
--- missing source code
-go
-
-grant execute on expdPreWebReportRev2 to [public]
-go
-
-create or alter procedure getRovCtd(@startdtg varchar(30), @enddtg varchar(30), @vehicle char(4)) as
--- missing source code
-go
-
-grant execute on getRovCtd to [public]
-go
-
-create or alter procedure getRovCtdCommasOLD(@startdtg varchar(30), @enddtg varchar(30), @vehicle char(4)) as
--- missing source code
-go
-
-grant execute on getRovCtdCommasOLD to [public]
-go
-
-create or alter procedure getRovCtdDY(@startYear varchar(8), @dayOfYear int, @vehicle char(4)) as
--- missing source code
-go
-
-grant execute on getRovCtdDY to [public]
-go
-
-create or alter function getXB(@Y1 float, @XM float) returns decimal(10, 7) as
--- missing source code
-go
-
-grant execute on getXB to [public]
-go
-
-create or alter function getXM(@Y1 float, @A1 float, @Y0 float, @A0 float, @W0 float, @TW float) returns decimal(10, 6) as
--- missing source code
-go
-
-grant execute on getXM to [public]
-go
-
-create or alter function getYrYdayFromFilename(@filename varchar(50)) returns varchar(50) as
--- missing source code
-go
-
-grant execute on getYrYdayFromFilename to [public]
-go
-
-create or alter procedure insert_Expedition(@ShipName varchar(4), @ShipSeqNum int, @Purpose varchar(4096),
-                                            @StatCode varchar(30), @ExpdChiefScientist varchar(50),
-                                            @ExpdPrincipalInvestigator varchar(50), @ScheduledStartDtg datetime,
-                                            @ScheduledEndDtg datetime, @EquipmentDesc varchar(2048),
-                                            @Participants varchar(2048), @RegionDesc varchar(2048),
-                                            @PlannedTrackDesc varchar(6144), @StartDtg datetime, @EndDtg datetime,
-                                            @Accomplishments varchar(2048), @ScientistComments varchar(2048),
-                                            @SciObjectivesMet varchar(50), @OperatorComments varchar(2048),
-                                            @AllEquipmentFunctioned varchar(50), @OtherComments varchar(2048),
-                                            @UpdatedBy varchar(50), @ismodified int) as
--- missing source code
-go
-
-grant execute on insert_Expedition to [public]
-go
-
-create or alter function iso8601Format(@dtg datetime) returns varchar(20) as
--- missing source code
-go
-
-grant execute on iso8601Format to [public]
-go
-
-create or alter function mydtformat(@dtg datetime) returns varchar(23) as
--- missing source code
-go
-
-grant execute on mydtformat to [public]
-go
-
-create or alter function nameonly(@filename varchar(50)) returns varchar(50) as
--- missing source code
-go
-
-grant execute on nameonly to [public]
-go
-
-create or alter function o2mlperliter2uM(@o2ml float, @mvol float) returns decimal(8, 4) as
--- missing source code
-go
-
-grant execute on o2mlperliter2uM to [public]
-go
-
-create or alter function o2umolperkg(@s float, @t float, @p float, @o2ml float) returns decimal(8, 4) as
--- missing source code
-go
-
-grant execute on o2umolperkg to [public]
-go
-
-create or alter procedure rovctdByEpochSec(@target int, @rov char(4)) as
--- missing source code
-go
-
-grant execute on rovctdByEpochSec to [public]
-go
-
-create or alter procedure rovctdByExpd(@yr int, @dy int, @rov char(4)) as
--- missing source code
-go
-
-grant execute on rovctdByExpd to [public]
-go
-
-create or alter procedure rovctdllByExpd(@yr int, @dy int, @rov char(4)) as
--- missing source code
-go
-
-grant execute on rovctdllByExpd to [public]
-go
-
-create or alter procedure sp_cleanForWeb(@text varchar(8000)) as
--- missing source code
-go
-
-grant execute on sp_cleanForWeb to [public]
-go
-
-create or alter function yryday(@dtg datetime) returns varchar(24) as
--- missing source code
-go
-
-grant execute on yryday to [public]
-go
-
-create or alter function yyyyddd(@dtg datetime) returns varchar(7) as
--- missing source code
-go
-
-grant execute on yyyyddd to [public]
-go
 
