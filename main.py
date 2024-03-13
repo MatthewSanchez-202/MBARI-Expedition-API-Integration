@@ -32,5 +32,27 @@ def update_data(expedition_id, expeditiondDataID_FK_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/get/<int:id>', methods=['GET'])
+def get_by_id(id):
+    try:
+        
+        connection = pyodbc.connect(connectionString)
+        
+        cursor = connection.cursor()
+        
+        select_query = f"SELECT * FROM Admin_BadStillImageURL WHERE ExpeditionID = ? "
+        cursor.execute(select_query, id)
+        
+        row = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        
+        if row:
+            return str(row)
+        else:
+            return jsonify({'error': 'No entry matching this id'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
