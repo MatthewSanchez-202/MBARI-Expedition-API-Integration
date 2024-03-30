@@ -36,6 +36,11 @@ INSERT INTO DocRickettsRawCtdData_2024 (DatetimeGMT, EpochSecs, LoadID_FK, ctdus
 VALUES ('2024-03-06 12:00:00', 100, 500, 1000000, 25.5, 35.678, 1023.45, 1.23, 4.56, 7.89, 10.11, 5000000, 0.3456, 34.56789, -123.45678, 34.56789, 1, 0, 1),
        ('2024-03-07 13:30:00', 200, 501, 1500000, 28.3, 38.901, 987.65, 2.34, 5.67, 8.90, 11.12, 6000000, 0.4567, 12.34567, -45.67890, 12.34567, 0, 1, 0);
 
+-- Test data for Expedition
+INSERT INTO Expedition
+VALUES (1000, 01, 'Ship1', 10, 'Purpose...', '010101', 'Scientist', 'Investigator', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Equipment...', 'Participants...', 'Region...', 'Track...', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Accomplishments...', 'Comments...', 'Objectivese Met?...' , 'Operator comments...', 'Functioned?...', 'Other...', 'Updated by...', 1),
+       (1001, 02, 'Ship2', 20, 'Purpose...', '020202', 'Scientist', 'Investigator', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Equipment...', 'Participants...', 'Region...', 'Track...', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Accomplishments...', 'Comments...', 'Objectivese Met?...' , 'Operator comments...', 'Functioned?...', 'Other...', 'Updated by...', 1);
+
 SELECT * FROM Admin_BadStillImageURL;
 SELECT * FROM Calendar;
 SELECT * FROM CamlogData_2024;
@@ -43,3 +48,4 @@ SELECT * FROM Dive;
 SELECT * FROM DocRickettsPilotsDive;
 SELECT * FROM DocRickettsPilotsDiveStaging;
 SELECT * FROM DocRickettsRawCtdData_2024;
+SELECT * FROM Expedition;
