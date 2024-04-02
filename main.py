@@ -3,13 +3,36 @@ import pyodbc
 
 app = Flask(__name__)
 SERVER = 'localhost'
-DATABASE = '<yourDatabaseName>'
-USERNAME = '<yourUsername>'
-PASSWORD = '<yourpassword>'
+DATABASE = 'master'
+USERNAME = 'SA'
+PASSWORD = 'password1!'
 
 
 connectionString = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={SERVER};DATABASE={DATABASE};UID={USERNAME};PWD={PASSWORD};'
 from flask import request
+
+@app.route("/post/<int:expeditiondDataID_FK_id>/<int:expedition_id>", methods=['POST'])
+def create_Admin_BadStillImageURL(expeditiondDataID_FK_id, expedition_id):
+    try:
+        data = request.json
+        HtmlError = data['HtmlError']
+        URL = data['URL']
+
+        connection = pyodbc.connect(connectionString)
+
+        cursor = connection.cursor()
+
+        create_query = f"INSERT INTO Admin_BadStillImageURL (ExpeditiondDataID_FK, ExpeditionID, HtmlError, URL) VALUES (?, ?, ?, ?);"
+        cursor.execute(create_query, (expeditiondDataID_FK_id, expedition_id, HtmlError, URL))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return jsonify({'message': 'Admin_BadStillImageURL successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @app.route('/update/<int:expedition_id>/<int:expeditiondDataID_FK_id>', methods=['PUT'])
 def update_data(expedition_id, expeditiondDataID_FK_id):
