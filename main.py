@@ -11,25 +11,47 @@ PASSWORD = 'password1!'
 connectionString = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={SERVER};DATABASE={DATABASE};UID={USERNAME};PWD={PASSWORD};'
 from flask import request
 
-@app.route("/post/<int:expeditiondDataID_FK_id>/<int:expedition_id>", methods=['POST'])
-def create_Admin_BadStillImageURL(expeditiondDataID_FK_id, expedition_id):
+@app.route("/post/create_expedition", methods=['POST'])
+def create_Expedition(expeditiondDataID_FK_id, expedition_id):
     try:
         data = request.json
-        HtmlError = data['HtmlError']
-        URL = data['URL']
+        
+        DeviceID = data['DeviceID']
+        ShipName = data['ShipName']
+        ShipSeqNum = data['ShipSeqNum']
+        Purpose = data['Purpose']
+        StatCode = data['StatCode']
+        ExpdChiefScientist = data['ExpdChiefScientist']
+        ExpdPrincipalInvestigator = data['ExpdPrincipalInvestigator']
+        ScheduledStartDtg = data['ScheduledStartDtg']
+        ScheduledEndDtg = data['ScheduledEndDtg']
+        EquipmentDesc = data['EquipmentDesc']
+        Participants = data['Participants']
+        RegionDesc = data['RegionDesc']
+        PlannedTrackDesc = data['PlannedTrackDesc']
+        StartDtg = data['StartDtg']
+        EndDtg = data['EndDtg']
+        Accomplishments = data['Accomplishments']
+        ScientistComments = data['ScientistComments']
+        SciObjectivesMet = data['SciObjectivesMet']
+        OperatorComments = data['OperatorComments']
+        AllEquipmentFunctioned = data['AllEquipmentFunctioned']
+        OtherComments = data['OtherComments']
+        UpdatedBy = data['UpdatedBy']
+        ismodified = data['ismodified']
 
         connection = pyodbc.connect(connectionString)
 
         cursor = connection.cursor()
 
-        create_query = f"INSERT INTO Admin_BadStillImageURL (ExpeditiondDataID_FK, ExpeditionID, HtmlError, URL) VALUES (?, ?, ?, ?);"
-        cursor.execute(create_query, (expeditiondDataID_FK_id, expedition_id, HtmlError, URL))
+        create_query = f"INSERT INTO Expedition (DeviceID, ShipName, ShipSeqNum, Purpose, StatCode, ExpdChiefScientist, ExpdPrincipalInvestigator, ScheduledStartDtg, ScheduledEndDtg, EquipmentDesc, Participants, RegionDesc, PlannedTrackDesc, StartDtg, EndDtg, Accomplishments, ScientistComments, SciObjectivesMet, OperatorComments, AllEquipmentFunctioned, OtherComments, UpdatedBy, UpdatedBy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+        cursor.execute(create_query, (DeviceID, ShipName, ShipSeqNum, Purpose, StatCode, ExpdChiefScientist, ExpdPrincipalInvestigator, ScheduledStartDtg, ScheduledEndDtg, EquipmentDesc, Participants, RegionDesc, PlannedTrackDesc, StartDtg, EndDtg, Accomplishments, ScientistComments, SciObjectivesMet, OperatorComments, AllEquipmentFunctioned, OtherComments, UpdatedBy, ismodified))
 
         connection.commit()
         cursor.close()
         connection.close()
 
-        return jsonify({'message': 'Admin_BadStillImageURL successfully'}), 200
+        return jsonify({'message': 'Created new expedition successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
