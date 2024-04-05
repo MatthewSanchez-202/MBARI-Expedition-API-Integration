@@ -56,6 +56,37 @@ def create_Expedition():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route("/post/create_dive", methods=['POST'])
+def create_dive():
+    try:
+        data = request.json
+
+        DiveID = data['DiveID']
+        DeviceID = data['DeviceID']
+        RovName = data['RovName']
+        DiveNumber = data['DiveNumber']
+        ExpeditionID_FK = data['ExpeditionID_FK']
+        DiveStartDtg = data['DiveStartDtg']
+        DiveEndDtg = data['DiveEndDtg']
+        DiveChiefScientist = data['DiveChiefScientist']
+        BriefAccomplishments = data['BriefAccomplishments']
+        DiveStartTimecode = data['DiveStartTimecode']
+        DiveEndTimecode = data['DiveEndTimecode']
+        DiveLatMid = data['DiveLatMid']
+        DiveLonMid = data['DiveLonMid']
+        DiveDepthMid = data['DiveDepthMid']
+        rowguid = data['rowguid']
+
+        connection = pyodbc.connect(connectionString)
+
+        cursor = connection.cursor()
+
+        create_query = f"INSERT INTO Dive (DiveID, DeviceID, RovName, DiveNumber, ExpeditionID_FK, DiveStartDtg, DiveEndDtg, DiveChiefScientist, BriefAccomplishments, DiveStartTimecode, DiveEndTimecode, DiveLatMid, DiveLonMid, DiveDepthMid, rowguid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NEWID())"
+        cursor.execute(create_query, (DiveID, DeviceID, RovName, DiveNumber, ExpeditionID_FK, DiveStartDtg, DiveEndDtg, DiveChiefScientist, BriefAccomplishments, DiveStartTimecode, DiveEndTimecode, DiveLatMid, DiveLonMid, DiveDepthMid))
+
+        return jsonify({'message': 'Created new dive successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/update/<int:expedition_id>/<int:expeditiondDataID_FK_id>', methods=['PUT'])
 def update_data(expedition_id, expeditiondDataID_FK_id):
