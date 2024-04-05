@@ -75,15 +75,18 @@ def create_dive():
         DiveLatMid = data['DiveLatMid']
         DiveLonMid = data['DiveLonMid']
         DiveDepthMid = data['DiveDepthMid']
-        rowguid = data['rowguid']
 
         connection = pyodbc.connect(connectionString)
 
         cursor = connection.cursor()
 
-        create_query = f"INSERT INTO Dive (DiveID, DeviceID, RovName, DiveNumber, ExpeditionID_FK, DiveStartDtg, DiveEndDtg, DiveChiefScientist, BriefAccomplishments, DiveStartTimecode, DiveEndTimecode, DiveLatMid, DiveLonMid, DiveDepthMid, rowguid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NEWID())"
+        create_query = f"INSERT INTO Dive (DiveID, DeviceID, RovName, DiveNumber, ExpeditionID_FK, DiveStartDtg, DiveEndDtg, DiveChiefScientist, BriefAccomplishments, DiveStartTimecode, DiveEndTimecode, DiveLatMid, DiveLonMid, DiveDepthMid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         cursor.execute(create_query, (DiveID, DeviceID, RovName, DiveNumber, ExpeditionID_FK, DiveStartDtg, DiveEndDtg, DiveChiefScientist, BriefAccomplishments, DiveStartTimecode, DiveEndTimecode, DiveLatMid, DiveLonMid, DiveDepthMid))
 
+        connection.commit()
+        cursor.close()
+        connection.close()
+        
         return jsonify({'message': 'Created new dive successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
