@@ -1,0 +1,372 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Swagger Petstore - OpenAPI 3.0",
+    "description": "This is a sample MBARI API Server based on the OpenAPI 3.0 specification.  You can find out more about\nSwagger at [https://swagger.io](https://swagger.io).\n\n\n_If you're looking for the Swagger 2.0/OAS 2.0 version of Petstore, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_\n\nSome useful links:\n- [MBARI Website](https://www.mbari.org)\n- [Contact MBARI](https://www.mbari.org/about/connect-with-us/)",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.11"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Expedition",
+      "description": "Information about MBARI Expedition"
+    },
+    {
+      "name": "Dive",
+      "description": "Information about MBARI Dives"
+    }
+  ],
+  "paths": {
+    "/update/Expedition/{expedition_id}": {
+      "put": {
+        "tags": [
+          "Expedition"
+        ],
+        "summary": "Update an existing MBARI Expedition",
+        "description": "Update an existing Expedition by expedition_id",
+        "operationId": "updateExpedition",
+        "parameters": [
+          {
+            "name": "expedition_id",
+            "in": "path",
+            "description": "Expedition id of expedition to be updated",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existent expedition from the database",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Expedition"
+              },
+              "example": {
+                "ExpeditionID": 1001,
+                "DeviceID": 2,
+                "ShipName": "Ship1",
+                "ShipSeqNum": 1,
+                "Purpose": "Purpose is to do am update test",
+                "StatCode": "TestStatCode: 3000",
+                "OtherComments": "Swagger Is Being updated even more as i type this.",
+                "UpdatedBy": "Team 7 Member : Fabian Santano",
+                "ismodified": 1
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Expedition"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    },
+    "/update/Dive/{DiveID}": {
+      "put": {
+        "tags": [
+          "Dive"
+        ],
+        "summary": "Update an existing MBARI Dive",
+        "description": "Update an existing Dive by DiveId",
+        "operationId": "updateDive",
+        "parameters": [
+          {
+            "name": "DiveID",
+            "in": "path",
+            "description": "Expedition id of expedition to be updated",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existent expedition from the database",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Dive"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dive"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Expedition": {
+        "type": "object",
+        "properties": {
+          "ExpeditionID": {
+            "type": "integer",
+            "format": "int",
+            "example": 1001
+          },
+          "DeviceID": {
+            "type": "integer",
+            "format": "int",
+            "example": 1
+          },
+          "ShipName": {
+            "type": "string",
+            "format": "varchar(5)",
+            "example": "Ship1"
+          },
+          "ShipSeqNum": {
+            "type": "integer",
+            "format": "int",
+            "example": 1
+          },
+          "Purpose": {
+            "type": "string",
+            "format": "varchar(8000)",
+            "description": "",
+            "example": "Purpose is to test this API "
+          },
+          "StatCode": {
+            "type": "string",
+            "format": "varchar(30)",
+            "description": "",
+            "example": "TestStatCode: 3000"
+          },
+          "ExpdChiefScientist": {
+            "type": "string",
+            "format": "varchar(50)",
+            "description": "",
+            "example": "Mike McCann"
+          },
+          "ExpdPrincipalInvestigator": {
+            "type": "string",
+            "format": "varchar(50)",
+            "description": "",
+            "example": "Fabian Santano"
+          },
+          "ScheduledStartDtg": {
+            "type": "string",
+            "format": "datetime",
+            "description": "",
+            "example": "2024-03-22 12:00:00"
+          },
+          "ScheduledEndDtg": {
+            "type": "string",
+            "format": "datetime",
+            "description": "",
+            "example": "2024-03-23 12:00:00"
+          },
+          "EquipmentDesc": {
+            "type": "string",
+            "format": "varchar(8000)",
+            "description": "",
+            "example": "EquipmentDesc"
+          },
+          "Participants": {
+            "type": "string",
+            "format": "varchar(2048)",
+            "description": "",
+            "example": "Fabian Santano, Marc Garcia, Matthew Sanchez, Nikhil Kulkarni, Ryan Romero"
+          },
+          "RegionDesc": {
+            "type": "string",
+            "format": "varchar(2048)",
+            "description": "",
+            "example": "RegionDesc"
+          },
+          "PlannedTrackDesc": {
+            "type": "string",
+            "format": "varchar(6144)",
+            "description": "",
+            "example": "PlannedTrackDesc"
+          },
+          "StartDtg": {
+            "type": "string",
+            "format": "datetime",
+            "description": "",
+            "example": "2024-04-22 12:00:00"
+          },
+          "EndDtg": {
+            "type": "string",
+            "format": "datetime",
+            "description": "",
+            "example": "2024-04-23 12:00:00"
+          },
+          "Accomplishments": {
+            "type": "string",
+            "format": "varchar(6144)",
+            "description": "",
+            "example": "CSUMB Graduate"
+          },
+          "ScientistComments": {
+            "type": "string",
+            "format": "varchar(6144)",
+            "description": "",
+            "example": "Fabian Santano, Marc Garcia, Matthew Sanchez, Nikhil Kulkarni, Ryan Romero"
+          },
+          "SciObjectivesMet": {
+            "type": "string",
+            "format": "varchar(50)",
+            "description": "",
+            "example": "SciObjectivesMet"
+          },
+          "OperatorComments": {
+            "type": "string",
+            "format": "varchar(2048)",
+            "description": "",
+            "example": "Expedition went as Planned"
+          },
+          "AllEquipmentFunctioned": {
+            "type": "string",
+            "format": "varchar(50)",
+            "description": "",
+            "example": "Yes All equipment"
+          },
+          "OtherComments": {
+            "type": "string",
+            "format": "varchar(2048)",
+            "description": "",
+            "example": "Swagger Is Being updated even more as i type this."
+          },
+          "UpdatedBy": {
+            "type": "string",
+            "format": "varchar(50)",
+            "description": "",
+            "example": "Team 7 Member : Fabian Santano"
+          },
+          "ismodified": {
+            "type": "integer",
+            "format": "int",
+            "description": "Int should be 0 or 1",
+            "example": 0
+          }
+        },
+        "xml": {
+          "name": "expedition"
+        }
+      },
+      "Dive": {
+        "type": "object",
+        "properties": {
+          "DiveID": {
+            "type": "integer",
+            "format": "int not null",
+            "example": 1
+          },
+          "DeviceID": {
+            "type": "integer",
+            "format": "int",
+            "example": 1
+          },
+          "RovName": {
+            "type": "string",
+            "format": "varchar(5)",
+            "example": "ROV1"
+          },
+          "DiveNumber": {
+            "type": "integer",
+            "format": "int",
+            "example": 101
+          },
+          "ExpeditionID_FK": {
+            "type": "integer",
+            "format": "int",
+            "example": 1001
+          },
+          "DiveStartDtg": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2024-03-06 08:00:00"
+          },
+          "DiveEndDtg": {
+            "type": "string",
+            "format": "datetime",
+            "example": "2024-03-06 11:30:00"
+          },
+          "DiveChiefScientist": {
+            "type": "string",
+            "format": "varchar(50)",
+            "example": "Dr. Smith"
+          },
+          "BriefAccomplishments": {
+            "type": "string",
+            "format": "varchar(5000)",
+            "example": "Successful exploration of underwater caves."
+          },
+          "DiveStartTimecode": {
+            "type": "string",
+            "format": "char(11)",
+            "example": "00:00:00:01"
+          },
+          "DiveEndTimecode": {
+            "type": "string",
+            "format": "char(11)",
+            "example": "00:00:03:01"
+          },
+          "DiveLatMid": {
+            "type": "number",
+            "format": "decimal(12, 8)",
+            "example": 34.56789
+          },
+          "DiveLonMid": {
+            "type": "number",
+            "format": "decimal(14, 8)",
+            "example": -123.45678
+          },
+          "DiveDepthMid": {
+            "type": "number",
+            "format": "decimal(7, 1)",
+            "example": 45.6
+          }
+        },
+        "xml": {
+          "name": "dive"
+        }
+      }
+    }
+  }
+}
