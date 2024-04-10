@@ -35,6 +35,87 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 
 app.register_blueprint(swaggerui_blueprint)
 
+# Create Expedition POST API
+@app.route("/post/create_expedition", methods=['POST'])
+def create_Expedition():
+    try:
+        data = request.json
+        
+        ExpeditionID = data['ExpeditionID']
+        DeviceID = data['DeviceID']
+        ShipName = data['ShipName']
+        ShipSeqNum = data['ShipSeqNum']
+        Purpose = data['Purpose']
+        StatCode = data['StatCode']
+        ExpdChiefScientist = data['ExpdChiefScientist']
+        ExpdPrincipalInvestigator = data['ExpdPrincipalInvestigator']
+        ScheduledStartDtg = data['ScheduledStartDtg']
+        ScheduledEndDtg = data['ScheduledEndDtg']
+        EquipmentDesc = data['EquipmentDesc']
+        Participants = data['Participants']
+        RegionDesc = data['RegionDesc']
+        PlannedTrackDesc = data['PlannedTrackDesc']
+        StartDtg = data['StartDtg']
+        EndDtg = data['EndDtg']
+        Accomplishments = data['Accomplishments']
+        ScientistComments = data['ScientistComments']
+        SciObjectivesMet = data['SciObjectivesMet']
+        OperatorComments = data['OperatorComments']
+        AllEquipmentFunctioned = data['AllEquipmentFunctioned']
+        OtherComments = data['OtherComments']
+        UpdatedBy = data['UpdatedBy']
+        ismodified = data['ismodified']
+
+        connection = pyodbc.connect(connectionString)
+
+        cursor = connection.cursor()
+
+        create_query = f"INSERT INTO Expedition (ExpeditionID, DeviceID, ShipName, ShipSeqNum, Purpose, StatCode, ExpdChiefScientist, ExpdPrincipalInvestigator, ScheduledStartDtg, ScheduledEndDtg, EquipmentDesc, Participants, RegionDesc, PlannedTrackDesc, StartDtg, EndDtg, Accomplishments, ScientistComments, SciObjectivesMet, OperatorComments, AllEquipmentFunctioned, OtherComments, UpdatedBy, ismodified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+        cursor.execute(create_query, (ExpeditionID, DeviceID, ShipName, ShipSeqNum, Purpose, StatCode, ExpdChiefScientist, ExpdPrincipalInvestigator, ScheduledStartDtg, ScheduledEndDtg, EquipmentDesc, Participants, RegionDesc, PlannedTrackDesc, StartDtg, EndDtg, Accomplishments, ScientistComments, SciObjectivesMet, OperatorComments, AllEquipmentFunctioned, OtherComments, UpdatedBy, ismodified))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return jsonify({'message': 'Created new expedition successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+#Create Dive Post API
+@app.route("/post/create_dive", methods=['POST'])
+def create_dive():
+    try:
+        data = request.json
+
+        DiveID = data['DiveID']
+        DeviceID = data['DeviceID']
+        RovName = data['RovName']
+        DiveNumber = data['DiveNumber']
+        ExpeditionID_FK = data['ExpeditionID_FK']
+        DiveStartDtg = data['DiveStartDtg']
+        DiveEndDtg = data['DiveEndDtg']
+        DiveChiefScientist = data['DiveChiefScientist']
+        BriefAccomplishments = data['BriefAccomplishments']
+        DiveStartTimecode = data['DiveStartTimecode']
+        DiveEndTimecode = data['DiveEndTimecode']
+        DiveLatMid = data['DiveLatMid']
+        DiveLonMid = data['DiveLonMid']
+        DiveDepthMid = data['DiveDepthMid']
+
+        connection = pyodbc.connect(connectionString)
+
+        cursor = connection.cursor()
+
+        create_query = f"INSERT INTO Dive (DiveID, DeviceID, RovName, DiveNumber, ExpeditionID_FK, DiveStartDtg, DiveEndDtg, DiveChiefScientist, BriefAccomplishments, DiveStartTimecode, DiveEndTimecode, DiveLatMid, DiveLonMid, DiveDepthMid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        cursor.execute(create_query, (DiveID, DeviceID, RovName, DiveNumber, ExpeditionID_FK, DiveStartDtg, DiveEndDtg, DiveChiefScientist, BriefAccomplishments, DiveStartTimecode, DiveEndTimecode, DiveLatMid, DiveLonMid, DiveDepthMid))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+        
+        return jsonify({'message': 'Created new dive successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 
