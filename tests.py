@@ -33,3 +33,24 @@ def test_create_expedition():
 
     r =  requests.post(f'{URL}/post/create_expedition', json=data)
     assert r.status_code == 200
+
+def test_create_dive():
+    data = {
+        "DiveID": 3,
+        "DeviceID": 10,
+        "RovName": "Dave",
+        "DiveNumber": 20,
+        "ExpeditionID_FK": 1,
+        "DiveStartDtg": "2024-03-21 12:30:30",
+        "DiveEndDtg": "2024-03-21 15:30:00",
+        "DiveChiefScientist": "Mike McCann",
+        "BriefAccomplishments": "Collected a specimen in Deep Sea",
+        "DiveStartTimecode": "00:00:00:01",
+        "DiveEndTimecode": "00:00:03:00",
+        "DiveLatMid": 101.53,
+        "DiveLonMid": 250.73,
+        "DiveDepthMid": 1100.20
+    }
+
+    r = requests.post(f'{URL}/post/create_dive', json=data)
+    assert r.status_code == 200
