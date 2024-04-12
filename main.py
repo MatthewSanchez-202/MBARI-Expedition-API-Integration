@@ -4,10 +4,10 @@ from flask_swagger_ui import get_swaggerui_blueprint
 
 
 app = Flask(__name__)
-SERVER = 'YOUR Server'
+SERVER = 'localhost'
 DATABASE = 'YOUR DB'
 USERNAME = 'SA'
-PASSWORD = 'YOURPASSWO!'
+PASSWORD = 'PASSWORD'
 
 # Define the connection string
 connectionString = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={SERVER};DATABASE={DATABASE};UID={USERNAME};PWD={PASSWORD};'
@@ -148,6 +148,13 @@ def updateExpedition_data(expedition_id):
         data = request.json
         connection = pyodbc.connect(connectionString)
         cursor = connection.cursor()
+        # Check if expedition_id exists in the database
+        cursor.execute("SELECT COUNT(*) FROM Expedition WHERE ExpeditionID = ?", (expedition_id))
+        row_count = cursor.fetchone()[0]
+        if row_count == 0:
+            return jsonify({'error': 'Invalid expedition_id '}), 400
+        
+        
         columns = []
         valueForColumn = []
 
@@ -170,7 +177,7 @@ def updateExpedition_data(expedition_id):
         cursor.close()
         connection.close()
 
-        return jsonify({'message': 'Data updated successfully'}), 200
+        return jsonify({'message': ' Expedition Table Data updated successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
@@ -181,6 +188,14 @@ def updateDive_data(dive_id):
         data = request.json
         connection = pyodbc.connect(connectionString)
         cursor = connection.cursor()
+
+        # Check if expedition_id exists in the database
+        cursor.execute("SELECT COUNT(*) FROM Dive WHERE DiveID = ?", (dive_id))
+        row_count = cursor.fetchone()[0]
+        if row_count == 0:
+            return jsonify({'error': 'Invalid expedition_id '}), 400
+        
+        
         columns = []
         valueForColumn = []
 
@@ -203,7 +218,7 @@ def updateDive_data(dive_id):
         connection.close()
 
         
-        return jsonify({'message': 'Data updated successfully'}), 200
+        return jsonify({'message': 'Dive table Data updated successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
