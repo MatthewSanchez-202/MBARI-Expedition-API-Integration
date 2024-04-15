@@ -163,5 +163,32 @@ def get_by_id_dive(id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+    @app.route('/get/<string:table>/<int:id>', methods=['GET'])
+def get_by_id(table,id):
+    try:
+        columnName = table + 'id'
+        
+        connection = pyodbc.connect(connectionString)
+        
+        cursor = connection.cursor()
+        
+        select_query = f'SELECT * FROM {table} WHERE {columnName} = ? '
+        cursor.execute(select_query, id)
+        
+        columns = [column[0] for column in cursor.description]
+        results = []
+        rows = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        if rows:
+            for row in rows:
+                results.append(dict(zip(columns, row)))   
+            return jsonify(results)
+        else:
+            return jsonify({'error': 'No entry matching this id'})
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
