@@ -123,19 +123,22 @@ def get_by_id_expedition(id):
         select_query = f"SELECT * FROM Expedition WHERE ExpeditionID = ? "
         cursor.execute(select_query, id)
         
-        row = cursor.fetchone()
+        columns = [column[0] for column in cursor.description]
+        results = []
+        rows = cursor.fetchall()
         cursor.close()
         connection.close()
-        
-        if row:
-            return str(row)
+        if rows:
+            for row in rows:
+                results.append(dict(zip(columns, row)))   
+            return jsonify(results)
         else:
             return jsonify({'error': 'No entry matching this id'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
 @app.route('/getDive/<int:id>', methods=['GET'])
-def get_by_id_dirve(id):
+def get_by_id_dive(id):
     try:
         
         connection = pyodbc.connect(connectionString)
@@ -145,14 +148,18 @@ def get_by_id_dirve(id):
         select_query = f"SELECT * FROM Dive WHERE DiveID = ? "
         cursor.execute(select_query, id)
         
-        row = cursor.fetchone()
+        columns = [column[0] for column in cursor.description]
+        results = []
+        rows = cursor.fetchall()
         cursor.close()
         connection.close()
-        
-        if row:
-            return str(row)
+        if rows:
+            for row in rows:
+                results.append(dict(zip(columns, row)))   
+            return jsonify(results)
         else:
             return jsonify({'error': 'No entry matching this id'})
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
