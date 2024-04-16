@@ -33,6 +33,72 @@
     }
   ],
   "paths": {
+    "/post/create_dive": {
+      "post": {
+        "tags": [
+          "Dive"
+        ],
+        "summary": "Create an MBARI Dive",
+        "description": "Create a new dive to insert into Dive table",
+        "operationId": "createDive",
+        "requestBody": {
+          "description": "Create a new Dive to insert into Dive table",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Dive"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful insertion of new MBARI dive into Dive table"
+          },
+          "400": {
+            "description": "Invalid Dive ID"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    }
+    ,
+    "/post/create_expedition": {
+      "post": {
+        "tags": [
+          "Expedition"
+        ],
+        "summary": "Create an MBARI Expedition",
+        "description": "Create a new Expedition to insert into Expedition table",
+        "operationId": "createExpedition",
+        "requestBody": {
+          "description": "Create a new Expedition to insert into Expedition table",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Expedition"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful insertion of new MBARI expedition into Expedition table"
+          },
+          "400": {
+            "description": "Invalid Expedition ID"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    }
+    ,
     "/update/Expedition/{expedition_id}": {
       "put": {
         "tags": [
