@@ -142,6 +142,46 @@
         }
       }
     },
+    "/delete/Expedition/{expedition_id}": {
+      "delete": {
+        "tags": [
+          "Expedition"
+        ],
+        "summary": "Delete an existing MBARI Expedition",
+        "description": "Delete an existing Expedition by expedition_id",
+        "operationId": "deleteExpedition",
+        "parameters": [
+          {
+            "name": "expedition_id",
+            "in": "path",
+            "description": "Expedition id of expedition to be deleted",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Delete an existent expedition from the database",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Expedition"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    },
     "/update/Dive/{DiveID}": {
       "put": {
         "tags": [
@@ -178,6 +218,46 @@
           },
           "400": {
             "description": "Invalid ID"
+          },
+          "500": {
+            "description": "error"
+          }
+        }
+      }
+    },
+        "/delete/Dive/{DiveID}": {
+      "delete": {
+        "tags": [
+          "Dive"
+        ],
+        "summary": "Delete an existing MBARI Dive",
+        "description": "Delete an existing Dive by DiveId",
+        "operationId": "deleteDive",
+        "parameters": [
+          {
+            "name": "DiveID",
+            "in": "path",
+            "description": "Expedition id of expedition to be deleted",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Delete an existent expedition from the database",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Dive"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation"
           },
           "500": {
             "description": "error"
