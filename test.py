@@ -8,7 +8,7 @@ valid_fields = {
     '/get-all-dives': ['DiveID', 'RovName', 'DiveStartDtg', 'DiveNumber']
 }
 valid_orders = ['asc', 'desc']
-
+# parametrize testing with diffrent values
 @pytest.mark.parametrize("endpoint, field, order", [
     ('/get-all-expeditions', 'ExpeditionID', 'asc'),
     ('/get-all-expeditions', 'ExpeditionID', 'desc'),
@@ -23,8 +23,8 @@ valid_orders = ['asc', 'desc']
     ('/get-all-dives', 'InvalidField', 'asc'),
     ('/get-all-dives', 'DiveID', 'InvalidOrder')
 ])
+# function for sorted response with many inputs
 def test_sorted_response(endpoint, field, order):
-    """Test sorting functionality for various endpoints with parameterized inputs."""
     if field in valid_fields.get(endpoint, []) and order in valid_orders:
         expected_status = 200
     else:
