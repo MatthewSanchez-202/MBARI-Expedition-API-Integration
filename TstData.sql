@@ -39,7 +39,8 @@ VALUES ('2024-03-06 12:00:00', 100, 500, 1000000, 25.5, 35.678, 1023.45, 1.23, 4
 -- Test data for Expedition
 INSERT INTO Expedition
 VALUES (1000, 01, 'Ship1', 10, 'Purpose...', '010101', 'Scientist', 'Investigator', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Equipment...', 'Participants...', 'Region...', 'Track...', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Accomplishments...', 'Comments...', 'Objectivese Met?...' , 'Operator comments...', 'Functioned?...', 'Other...', 'Updated by...', 1),
-       (1001, 02, 'Ship2', 20, 'Purpose...', '020202', 'Scientist', 'Investigator', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Equipment...', 'Participants...', 'Region...', 'Track...', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Accomplishments...', 'Comments...', 'Objectivese Met?...' , 'Operator comments...', 'Functioned?...', 'Other...', 'Updated by...', 1);
+       (1001, 02, 'Ship2', 20, 'Purpose...', '020202', 'Scientist', 'Investigator', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Equipment...', 'Participants...', 'Region...', 'Track...', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Accomplishments...', 'Comments...', 'Objectivese Met?...' , 'Operator comments...', 'Functioned?...', 'Other...', 'Updated by...', 1
+       1002, 02, 'Ship3', 20, 'Purpose...', '030303', 'Scientist', 'Investigator', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Equipment...', 'Participants...', 'Region...', 'Track...', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Accomplishments...', 'Comments...', 'Objectivese Met?...' , 'Operator comments...', 'Functioned?...', 'Other...', 'Updated by...', 1);
 
 SELECT * FROM Admin_BadStillImageURL;
 SELECT * FROM Calendar;
