@@ -18,54 +18,57 @@ def home():
 
 @app.route('/get-all-expeditions', methods=['GET'])
 def get_all_expeditions():
-    sort_field = request.args.get('sortfield', default='ExpeditionID', type=str)  # Default sort by ExpeditionID
-    sort_order = request.args.get('sortorder', default='asc', type=str)  # Default sort order is ascending
-    
-    
+    sort_field = request.args.get('sortfield', default='ExpeditionID', type=str)
+    sort_order = request.args.get('sortorder', default='asc', type=str).upper()
+
     valid_sort_fields = ['ExpeditionID', 'ShipName']
     if sort_field not in valid_sort_fields:
         return jsonify({'error': 'Invalid sort field'}), 400
 
-    if sort_order.lower() not in ['asc', 'desc']:
+    if sort_order not in ['ASC', 'DESC']:
         return jsonify({'error': 'Invalid sort order'}), 400
+
     try:
         with pyodbc.connect(connectionString) as conn:
             cursor = conn.cursor()
-            query = f'SELECT * FROM Expedition ORDER BY {sort_field} {sort_order.upper()}'
-            cursor.execute(query)  
+            query = f"SELECT * FROM Expedition ORDER BY [{sort_field}] {sort_order}"
+            cursor.execute(query)
             rows = cursor.fetchall()
-            
+
             columns = [column[0] for column in cursor.description]
             expeditions = [dict(zip(columns, row)) for row in rows]
             return jsonify(expeditions)
+    except pyodbc.Error as e:
+        return jsonify({'error': str(e)}), 500
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({'error': 'Internal server error'}), 500
+
 
 @app.route('/get-all-dives', methods=['GET'])
 def get_all_dives():
-    sort_field = request.args.get('sortfield', default='DiveID', type=str)  # Default sort by DiveID
-    sort_order = request.args.get('sortorder', default='asc', type=str)  # Default sort order is ascending
+    sort_field = request.args.get('sortfield', default='DiveID', type=str)
+    sort_order = request.args.get('sortorder', default='asc', type=str).upper()
 
-    
-    valid_sort_fields = ['DiveID', 'DiveStartDtg', 'DiveNumber' , 'RovName']  # Add more fields as needed
+    valid_sort_fields = ['DiveID', 'DiveStartDtg', 'DiveNumber', 'RovName']
     if sort_field not in valid_sort_fields:
         return jsonify({'error': 'Invalid sort field'}), 400
 
-    
-    if sort_order.lower() not in ['asc', 'desc']:
+    if sort_order not in ['ASC', 'DESC']:
         return jsonify({'error': 'Invalid sort order'}), 400
+
     try:
         with pyodbc.connect(connectionString) as conn:
             cursor = conn.cursor()
-            query = f'SELECT * FROM Dive ORDER BY {sort_field} {sort_order.upper()}'
-            cursor.execute(query)  
+            query = f"SELECT * FROM Dive ORDER BY [{sort_field}] {sort_order}"
+            cursor.execute(query)
             rows = cursor.fetchall()
-            
+
             columns = [column[0] for column in cursor.description]
             dives = [dict(zip(columns, row)) for row in rows]
             return jsonify(dives)
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return jsonify({'error': 'Internal server error'}), 500
+
 @app.route('/get-all-calendar', methods=['GET'])
 def get_all_calendar():
     try:
