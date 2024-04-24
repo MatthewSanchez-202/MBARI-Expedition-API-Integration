@@ -18,6 +18,7 @@ def home():
 
 @app.route('/get-all-expeditions', methods=['GET'])
 def get_all_expeditions():
+    # filtering sort order and sort field 
     sort_field = request.args.get('sortfield', default='ExpeditionID', type=str)
     sort_order = request.args.get('sortorder', default='asc', type=str).upper()
 
@@ -43,7 +44,7 @@ def get_all_expeditions():
     except Exception as e:
         return jsonify({'error': 'Internal server error'}), 500
 
-
+ # filtering sort order and sort field 
 @app.route('/get-all-dives', methods=['GET'])
 def get_all_dives():
     sort_field = request.args.get('sortfield', default='DiveID', type=str)
