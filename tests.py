@@ -68,3 +68,34 @@ def test_get_by_id_expedition():
     response = r.json()
     assert(r.status_code == 200)
     assert(response[0]['ShipName'] == 'Ship2')
+
+def test_update_expedition_by_id():
+    expeditionID = 1001
+    inValidExpeditionID = 1
+    data = {
+        "ExpeditionID": 1001,
+        "DeviceID": 5,
+        "UpdatedBy": "Fabian Santano",
+        "ismodified": 1
+    }
+    r = requests.put(f'{URL}/update/Expedition/{expeditionID}' , json=data)
+    assert(r.status_code == 200)
+    r = requests.put(f'{URL}/update/Expedition/{inValidExpeditionID}' , json=data)
+    assert(r.status_code == 400)
+
+def test_update_dive_by_id():
+    diveID = 1
+    invalidDiveID = 100000
+    data = {
+        "DiveID": 1,
+        "DeviceID": 10,
+        "RovName": "Dave",
+        "DiveNumber": 20,
+        "ExpeditionID_FK": 1,
+        "DiveStartDtg": "2024-03-21 12:30:30",
+        "DiveEndDtg": "2024-03-21 15:30:00"
+    }
+    r = requests.put(f'{URL}/update/Dive/{diveID}' , json=data)
+    assert(r.status_code == 200)
+    r = requests.put(f'{URL}/update/Dive/{invalidDiveID}' , json=data)
+    assert(r.status_code == 400)
