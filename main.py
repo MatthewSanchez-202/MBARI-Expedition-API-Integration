@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
+from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 import pyodbc
-
 app = Flask(__name__)
 
 
@@ -11,7 +12,14 @@ PASSWORD = 'admin'
 
 
 connectionString = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={SERVER};DATABASE={DATABASE};UID={USERNAME};PWD={PASSWORD};'
-
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={'app_name': "Expedition and Dive API"}
+)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 @app.route('/')
 def home():
     return "Mbari get all function"
@@ -143,4 +151,5 @@ def adminerror():
     except Exception as e:
         return jsonify({'error': str(e)})
 if __name__ == '__main__':
+    CORS(app) 
     app.run(debug=True)
