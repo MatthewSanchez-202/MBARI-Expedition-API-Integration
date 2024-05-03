@@ -6,8 +6,9 @@ from flask import render_template, redirect
 from authlib.integrations.flask_client import OAuth
 from flask_login import LoginManager , login_required ,login_user  , logout_user , UserMixin    
 import requests
-
+from functools import wraps
 app = Flask(__name__)
+
 app.secret_key = '!secret'
 app.config.from_object('config')
 oauth = OAuth(app)
@@ -55,6 +56,25 @@ oauth.register(
         'scope': 'openid profile email '
     }
 )
+def isAuthorized_dec(func):
+    @wraps(func)
+    def wrapper_func(*args, **kwargs):
+        try:
+            connection = pyodbc.connect(connectionString)
+            cursor = connection.cursor()
+            cursor.execute("SELECT * FROM Users WHERE userEmail = ?", (str(session['user']),))
+            user_data = cursor.fetchone()
+            cursor.close()
+            connection.close()
+            user = User(user_data[0], user_data[1], user_data[2]) 
+            if user.typeOfUser == "admin":
+                return func(*args, **kwargs)
+        except Exception as e:
+            return "Error: " + str(e)
+        
+        return "Not Authorized"
+    
+    return wrapper_func
 
 
 @app.route('/')
@@ -72,7 +92,7 @@ def login():
 @app.route('/auth')
 def auth():
     token = oauth.google.authorize_access_token()
-    userinfo = token['userinfo']
+    userinfo = token['userinfo']   
     session['user'] = userinfo['email']
     data = {"userEmail": str(session['user'])}
     requests.post(f'{URL}/post/newUser',json=data)
@@ -84,10 +104,12 @@ def auth():
     connection.close()
     user = User(user_data[0] , user_data[1] ,user_data[2]) 
     login_user(user)
-    return redirect('/')
+    redirect_url = url_for('homepage', _external=True) + f'?access_token={token["access_token"]}'
+    return redirect(redirect_url)
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     session.pop('user', None)
@@ -116,6 +138,60 @@ class User(UserMixin):
         self.typeOfUser = typeOfUser
 
     
+@app.route('/get-all-expeditions', methods=['GET'])
+def get_all_expeditions():
+    # filtering sort order and sort field 
+    sort_field = request.args.get('sortfield', default='ExpeditionID', type=str)
+    sort_order = request.args.get('sortorder', default='asc', type=str).upper()
+
+    valid_sort_fields = ['ExpeditionID', 'ShipName']
+    if sort_field not in valid_sort_fields:
+        return jsonify({'error': 'Invalid sort field'}), 400
+
+    if sort_order not in ['ASC', 'DESC']:
+        return jsonify({'error': 'Invalid sort order'}), 400
+
+    try:
+        with pyodbc.connect(connectionString) as conn:
+            cursor = conn.cursor()
+            query = f"SELECT * FROM Expedition ORDER BY [{sort_field}] {sort_order}"
+            cursor.execute(query)
+            rows = cursor.fetchall()
+
+            columns = [column[0] for column in cursor.description]
+            expeditions = [dict(zip(columns, row)) for row in rows]
+            return jsonify(expeditions)
+    except pyodbc.Error as e:
+        return jsonify({'error': str(e)}), 500
+    except Exception as e:
+        return jsonify({'error': 'Internal server error'}), 500
+
+ # filtering sort order and sort field 
+@app.route('/get-all-dives', methods=['GET'])
+def get_all_dives():
+    sort_field = request.args.get('sortfield', default='DiveID', type=str)
+    sort_order = request.args.get('sortorder', default='asc', type=str).upper()
+
+    valid_sort_fields = ['DiveID', 'DiveStartDtg', 'DiveNumber', 'RovName']
+    if sort_field not in valid_sort_fields:
+        return jsonify({'error': 'Invalid sort field'}), 400
+
+    if sort_order not in ['ASC', 'DESC']:
+        return jsonify({'error': 'Invalid sort order'}), 400
+
+    try:
+        with pyodbc.connect(connectionString) as conn:
+            cursor = conn.cursor()
+            query = f"SELECT * FROM Dive ORDER BY [{sort_field}] {sort_order}"
+            cursor.execute(query)
+            rows = cursor.fetchall()
+
+            columns = [column[0] for column in cursor.description]
+            dives = [dict(zip(columns, row)) for row in rows]
+            return jsonify(dives)
+    except Exception as e:
+        return jsonify({'error': 'Internal server error'}), 500
+
 @app.route("/post/newUser", methods=['POST'])
 def create_user():
     try:
@@ -140,7 +216,9 @@ def create_user():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/update/Expedition/<int:expedition_id>', methods=['PUT'])
+@isAuthorized_dec
 @login_required
+
 def updateExpedition_data(expedition_id):
     try:
         
@@ -306,6 +384,7 @@ def create_dive():
 
 
 @app.route('/getExpedition/<int:id>', methods=['GET'])
+@isAuthorized_dec
 @login_required
 def get_by_id_expedition(id):
     try:
