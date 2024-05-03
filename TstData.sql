@@ -41,11 +41,26 @@ INSERT INTO Expedition
 VALUES (1000, 01, 'Ship1', 10, 'Purpose...', '010101', 'Scientist', 'Investigator', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Equipment...', 'Participants...', 'Region...', 'Track...', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Accomplishments...', 'Comments...', 'Objectivese Met?...' , 'Operator comments...', 'Functioned?...', 'Other...', 'Updated by...', 1),
        (1001, 02, 'Ship2', 20, 'Purpose...', '020202', 'Scientist', 'Investigator', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Equipment...', 'Participants...', 'Region...', 'Track...', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Accomplishments...', 'Comments...', 'Objectivese Met?...' , 'Operator comments...', 'Functioned?...', 'Other...', 'Updated by...', 1);
 
+INSERT INTO Users
+VALUES ('santanofabian@gmail.com' ,'admin');
 SELECT * FROM Admin_BadStillImageURL;
 SELECT * FROM Calendar;
-SELECT * FROM CamlogData_2024;
+ 
+
+SELECT * FROM Users;
 SELECT * FROM Dive;
+SELECT * FROM Expedition;
 SELECT * FROM DocRickettsPilotsDive;
 SELECT * FROM DocRickettsPilotsDiveStaging;
 SELECT * FROM DocRickettsRawCtdData_2024;
-SELECT * FROM Expedition;
+DELETE Dive;
+DELETE Expedition;
+DELETE Users;
+
+SELECT Name
+FROM sys.tables
+WHERE name LIKE '%DocRickettsRawCtdData%'
+-- 88-20240
+SELECT Name
+FROM sys.tables
+WHERE name LIKE 'CamlogData%' 
