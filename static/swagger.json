@@ -33,6 +33,155 @@
     }
   ],
   "paths": {
+    "/get/Expedition/{expedition_id}": {
+      "get": {
+          "tags": [
+              "Expedition"
+          ],
+          "summary": "Get a specific row in Expedition",
+          "description": "Get a specific entry in Expedition by expedition_id",
+          "operationId": "getByIdExpedition",
+          "parameters": [
+              {
+                  "name": "expedition_id",
+                  "in": "path",
+                  "description": "Expedition id of expedition to be updated",
+                  "required": true,
+                  "schema": {
+                      "type": "integer"
+                  }
+              }
+          ],
+          "responses" : {
+              "200": {
+                "description": "Successful operation"
+              },
+              "400": {
+                "description": "Invalid ID"
+              },
+              "500": {
+                "description": "error"
+              }
+            }
+      }
+    },
+  "/get/Dive/{dive_id}": {
+    "get": {
+        "tags": [
+            "Dive"
+        ],
+        "summary": "Get a specific row in Dive",
+        "description": "Get a specific entry in Dive by dive_id",
+        "operationId": "getByDive",
+        "parameters": [
+            {
+                "name": "dive_id",
+                "in": "path",
+                "description": "Expedition id of expedition to be updated",
+                "required": true,
+                "schema": {
+                    "type": "integer"
+                }
+            }
+        ],
+        "responses" : {
+            "200": {
+              "description": "Successful operation"
+            },
+            "400": {
+              "description": "Invalid ID"
+            },
+            "500": {
+              "description": "error"
+            }
+          }
+      }
+  },
+    
+    "/get-all-expeditions": {
+      "get": {
+        "tags": ["Expedition"],
+        "summary": "List all expeditions",
+        "description": "Retrieve a list of all expeditions with optional sorting.",
+        "parameters": [
+          {
+            "name": "sortfield",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "ExpeditionID",
+            "description": "Field to sort the expeditions by."
+          },
+          {
+            "name": "sortorder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "ASC",
+            "description": "Order to sort the expeditions (ASC or DESC)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Expedition"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid sort field or order"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/get-all-dives": {
+      "get": {
+        "tags": ["Dive"],
+        "summary": "List all dives",
+        "description": "Retrieve a list of all dives with optional sorting.",
+        "parameters": [
+          {
+            "name": "sortfield",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "DiveID",
+            "description": "Field to sort the dives by."
+          },
+          {
+            "name": "sortorder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "ASC",
+            "description": "Order to sort the dives (ASC or DESC)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Dive"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid sort field or order"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
     "/post/create_dive": {
       "post": {
         "tags": [
@@ -225,7 +374,7 @@
         }
       }
     },
-        "/delete/Dive/{DiveID}": {
+    "/delete/Dive/{DiveID}": {
       "delete": {
         "tags": [
           "Dive"
