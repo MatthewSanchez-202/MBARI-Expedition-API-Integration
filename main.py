@@ -139,7 +139,9 @@ class User(UserMixin):
 
     
 @app.route('/get-all-expeditions', methods=['GET'])
+@login_required
 def get_all_expeditions():
+
     # filtering sort order and sort field 
     sort_field = request.args.get('sortfield', default='ExpeditionID', type=str)
     sort_order = request.args.get('sortorder', default='asc', type=str).upper()
@@ -168,6 +170,7 @@ def get_all_expeditions():
 
  # filtering sort order and sort field 
 @app.route('/get-all-dives', methods=['GET'])
+@login_required
 def get_all_dives():
     sort_field = request.args.get('sortfield', default='DiveID', type=str)
     sort_order = request.args.get('sortorder', default='asc', type=str).upper()
@@ -193,6 +196,7 @@ def get_all_dives():
         return jsonify({'error': 'Internal server error'}), 500
 
 @app.route("/post/newUser", methods=['POST'])
+@login_required
 def create_user():
     try:
         data = request.json
@@ -218,7 +222,6 @@ def create_user():
 @app.route('/update/Expedition/<int:expedition_id>', methods=['PUT'])
 @isAuthorized_dec
 @login_required
-
 def updateExpedition_data(expedition_id):
     try:
         
@@ -258,6 +261,7 @@ def updateExpedition_data(expedition_id):
         return jsonify({'error': str(e)}), 500
     
 @app.route('/update/Dive/<int:dive_id>', methods=['PUT'])
+@login_required
 def updateDive_data(dive_id):
     try:
         
@@ -301,6 +305,7 @@ def updateDive_data(dive_id):
 
 # Create Expedition POST API
 @app.route("/post/create_expedition", methods=['POST'])
+@login_required
 def create_Expedition():
     try:
         data = request.json
@@ -347,6 +352,7 @@ def create_Expedition():
 
 #Create Dive Post API
 @app.route("/post/create_dive", methods=['POST'])
+@login_required
 def create_dive():
     try:
         data = request.json
@@ -411,6 +417,7 @@ def get_by_id_expedition(id):
         return jsonify({'error': str(e)}), 500
     
 @app.route('/getDive/<int:id>', methods=['GET'])
+@login_required
 def get_by_id_dive(id):
     try:
         
@@ -437,6 +444,7 @@ def get_by_id_dive(id):
         return jsonify({'error': str(e)}), 500
 
 @app.route('/get/<string:table>/<int:id>', methods=['GET'])
+@login_required
 def get_by_id(table,id):
     try:
         columnName = table + 'id'
@@ -465,6 +473,7 @@ def get_by_id(table,id):
     
 
 @app.route('/delete/Dive/<int:dive_id>', methods=['DELETE'])
+@login_required
 def deleteDive_data(dive_id):
     try:
         connection = pyodbc.connect(connectionString)
