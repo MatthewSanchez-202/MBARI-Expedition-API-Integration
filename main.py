@@ -16,9 +16,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 SERVER = 'localhost'
-DATABASE = 'MBARI'
+DATABASE = 'YOUR DB'
 USERNAME = 'SA'
-PASSWORD = 'Santano831!'
+PASSWORD = 'PASSWORD'
 URL = "http://127.0.0.1:5000"
 # Define the connection string
 connectionString = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={SERVER};DATABASE={DATABASE};UID={USERNAME};PWD={PASSWORD};'
