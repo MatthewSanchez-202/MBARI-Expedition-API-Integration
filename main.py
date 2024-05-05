@@ -1,20 +1,32 @@
-from flask import Flask, jsonify , request
+from flask import Flask, jsonify , request , json
 import pyodbc
 from flask_swagger_ui import get_swaggerui_blueprint 
-
-
+from flask import Flask, url_for, session 
+from flask import render_template, redirect
+from authlib.integrations.flask_client import OAuth
+from flask_login import LoginManager , login_required ,login_user  , logout_user , UserMixin    
+import requests
+from functools import wraps
 app = Flask(__name__)
+
+app.secret_key = '!secret'
+app.config.from_object('config')
+oauth = OAuth(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 SERVER = 'localhost'
 DATABASE = 'YOUR DB'
 USERNAME = 'SA'
 PASSWORD = 'PASSWORD'
-
+URL = "http://127.0.0.1:5000"
 # Define the connection string
 connectionString = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={SERVER};DATABASE={DATABASE};UID={USERNAME};PWD={PASSWORD};'
 
-SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
-API_URL = '/static/swagger.json'  # Our API url (can of course be a local resource)
 
+#SWAGGER
+SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI
+API_URL = '/static/swagger.json'  # Our API url (can of course be a local resource)
 
 # Call factory function to create our blueprint
 swaggerui_blueprint = get_swaggerui_blueprint(
@@ -23,20 +35,277 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     config={  # Swagger UI config overrides
         'app_name': "Test application"
     },
-    # oauth_config={  # OAuth config. See https://github.com/swagger-api/swagger-ui#oauth2-configuration .
+     oauth_config={  # OAuth config. See https://github.com/swagger-api/swagger-ui#oauth2-configuration .
     #    'clientId': "your-client-id",
     #    'clientSecret': "your-client-secret-if-required",
     #    'realm': "your-realms",
     #    'appName': "your-app-name",
     #    'scopeSeparator': " ",
     #    'additionalQueryStringParams': {'test': "hello"}
-    # }
+     }
 )
-
 app.register_blueprint(swaggerui_blueprint)
+
+#Google OAuth 2.0
+CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
+oauth = OAuth(app)
+oauth.register(
+    name='google',
+    server_metadata_url=CONF_URL,
+    client_kwargs={
+        'scope': 'openid profile email '
+    }
+)
+def isAuthorized_dec(func):
+    @wraps(func)
+    def wrapper_func(*args, **kwargs):
+        try:
+            connection = pyodbc.connect(connectionString)
+            cursor = connection.cursor()
+            cursor.execute("SELECT * FROM Users WHERE userEmail = ?", (str(session['user']),))
+            user_data = cursor.fetchone()
+            cursor.close()
+            connection.close()
+            user = User(user_data[0], user_data[1], user_data[2]) 
+            if user.typeOfUser == "admin":
+                return func(*args, **kwargs)
+        except Exception as e:
+            return "Error: " + str(e)
+        
+        return "Not Authorized"
+    
+    return wrapper_func
+
+
+@app.route('/')
+def homepage():
+    user = session.get('user')
+    return render_template('home.html', user=user)
+
+
+@app.route('/login')
+def login():
+    redirect_uri = url_for('auth', _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)
+
+
+@app.route('/auth')
+def auth():
+    token = oauth.google.authorize_access_token()
+    userinfo = token['userinfo']   
+    session['user'] = userinfo['email']
+    data = {"userEmail": str(session['user'])}
+    requests.post(f'{URL}/post/newUser',json=data)
+    connection = pyodbc.connect(connectionString)
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM Users WHERE userEmail = ?", (str(session['user'])))
+    user_data = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    user = User(user_data[0] , user_data[1] ,user_data[2]) 
+    login_user(user)
+    redirect_url = url_for('homepage', _external=True) + f'?access_token={token["access_token"]}'
+    return redirect(redirect_url)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    session.pop('user', None)
+    return redirect('/')
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    connection = pyodbc.connect(connectionString)
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM Users WHERE userID = ?", (user_id,))
+    user_data = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    
+    if user_data:
+        user = User(user_data[0], user_data[1], user_data[2])
+        return user
+    else:
+        return None
+
+class User(UserMixin):
+    def __init__(self, user_id, email, typeOfUser):
+        self.id = user_id
+        self.email = email
+        self.typeOfUser = typeOfUser
+
+    
+@app.route('/get-all-expeditions', methods=['GET'])
+@login_required
+def get_all_expeditions():
+
+    # filtering sort order and sort field 
+    sort_field = request.args.get('sortfield', default='ExpeditionID', type=str)
+    sort_order = request.args.get('sortorder', default='asc', type=str).upper()
+
+    valid_sort_fields = ['ExpeditionID', 'ShipName']
+    if sort_field not in valid_sort_fields:
+        return jsonify({'error': 'Invalid sort field'}), 400
+
+    if sort_order not in ['ASC', 'DESC']:
+        return jsonify({'error': 'Invalid sort order'}), 400
+
+    try:
+        with pyodbc.connect(connectionString) as conn:
+            cursor = conn.cursor()
+            query = f"SELECT * FROM Expedition ORDER BY [{sort_field}] {sort_order}"
+            cursor.execute(query)
+            rows = cursor.fetchall()
+
+            columns = [column[0] for column in cursor.description]
+            expeditions = [dict(zip(columns, row)) for row in rows]
+            return jsonify(expeditions)
+    except pyodbc.Error as e:
+        return jsonify({'error': str(e)}), 500
+    except Exception as e:
+        return jsonify({'error': 'Internal server error'}), 500
+
+ # filtering sort order and sort field 
+@app.route('/get-all-dives', methods=['GET'])
+@login_required
+def get_all_dives():
+    sort_field = request.args.get('sortfield', default='DiveID', type=str)
+    sort_order = request.args.get('sortorder', default='asc', type=str).upper()
+
+    valid_sort_fields = ['DiveID', 'DiveStartDtg', 'DiveNumber', 'RovName']
+    if sort_field not in valid_sort_fields:
+        return jsonify({'error': 'Invalid sort field'}), 400
+
+    if sort_order not in ['ASC', 'DESC']:
+        return jsonify({'error': 'Invalid sort order'}), 400
+
+    try:
+        with pyodbc.connect(connectionString) as conn:
+            cursor = conn.cursor()
+            query = f"SELECT * FROM Dive ORDER BY [{sort_field}] {sort_order}"
+            cursor.execute(query)
+            rows = cursor.fetchall()
+
+            columns = [column[0] for column in cursor.description]
+            dives = [dict(zip(columns, row)) for row in rows]
+            return jsonify(dives)
+    except Exception as e:
+        return jsonify({'error': 'Internal server error'}), 500
+
+@app.route("/post/newUser", methods=['POST'])
+@login_required
+def create_user():
+    try:
+        data = request.json
+        userEmail = data['userEmail']
+        connection = pyodbc.connect(connectionString)
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM Users WHERE userEmail = ?", (userEmail))
+        row_count = cursor.fetchone()[0]
+        if row_count == 1:
+            return jsonify({'message': 'User Already Exists '}), 200
+
+
+        create_query = f"INSERT INTO Users (userEmail, typeOfUser) VALUES (?, ?)"
+        cursor.execute(create_query, (userEmail, "user"))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        
+        return jsonify({'message': 'Created new user successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/update/Expedition/<int:expedition_id>', methods=['PUT'])
+@isAuthorized_dec
+@login_required
+def updateExpedition_data(expedition_id):
+    try:
+        
+        data = request.json
+        connection = pyodbc.connect(connectionString)
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM Expedition WHERE ExpeditionID = ?", (expedition_id))
+        row_count = cursor.fetchone()[0]
+        if row_count == 0:
+            return jsonify({'error': 'Invalid expedition_id '}), 400
+        
+        
+        columns = []
+        valueForColumn = []
+
+        #Go Through json body(data) and append column name and the column updated data
+        for colName, newValue in data.items():
+            # Same as DatetimeGMT = ?
+            columns.append(f"{colName} = ?")
+            valueForColumn.append(newValue)
+
+        valueForColumn.append(expedition_id)
+        columnsToUpdate = ","
+        columnsToUpdate = columnsToUpdate.join(columns)
+
+        # Construct the update query dynamically
+        update_query = f"UPDATE Expedition SET {columnsToUpdate} WHERE ExpeditionID = ?"
+
+        cursor.execute(update_query, valueForColumn)
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        return jsonify({'message': ' Expedition Table Data updated successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/update/Dive/<int:dive_id>', methods=['PUT'])
+@login_required
+def updateDive_data(dive_id):
+    try:
+        
+        data = request.json
+        connection = pyodbc.connect(connectionString)
+        cursor = connection.cursor()
+
+        # Check if expedition_id exists in the database
+        cursor.execute("SELECT COUNT(*) FROM Dive WHERE DiveID = ?", (dive_id))
+        row_count = cursor.fetchone()[0]
+        if row_count == 0:
+            return jsonify({'error': 'Invalid expedition_id '}), 400
+        
+        
+        columns = []
+        valueForColumn = []
+
+        #Go Through json body(data) and append column name and the column updated data
+        for colName, newValue in data.items():
+            #Same as DatetimeGMT = ?
+            columns.append(f"{colName} = ?")
+            valueForColumn.append(newValue)
+
+        valueForColumn.append(dive_id)
+        columnsToUpdate = ","
+        columnsToUpdate = columnsToUpdate.join(columns)
+
+        update_query = f"UPDATE Dive SET {columnsToUpdate} WHERE DiveID = ?"
+
+        cursor.execute(update_query, valueForColumn)
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        
+        return jsonify({'message': 'Dive table Data updated successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 # Create Expedition POST API
 @app.route("/post/create_expedition", methods=['POST'])
+@login_required
 def create_Expedition():
     try:
         data = request.json
@@ -83,6 +352,7 @@ def create_Expedition():
 
 #Create Dive Post API
 @app.route("/post/create_dive", methods=['POST'])
+@login_required
 def create_dive():
     try:
         data = request.json
@@ -119,106 +389,101 @@ def create_dive():
 
 
 
-@app.route('/get/<int:id>', methods=['GET'])
-def get_by_id(id):
+@app.route('/getExpedition/<int:id>', methods=['GET'])
+@isAuthorized_dec
+@login_required
+def get_by_id_expedition(id):
     try:
         
         connection = pyodbc.connect(connectionString)
         
         cursor = connection.cursor()
         
-        select_query = f"SELECT * FROM Admin_BadStillImageURL WHERE ExpeditionID = ? "
+        select_query = f"SELECT * FROM Expedition WHERE ExpeditionID = ? "
         cursor.execute(select_query, id)
         
-        row = cursor.fetchone()
+        columns = [column[0] for column in cursor.description]
+        results = []
+        rows = cursor.fetchall()
         cursor.close()
         connection.close()
-        
-        if row:
-            return str(row)
+        if rows:
+            for row in rows:
+                results.append(dict(zip(columns, row)))   
+            return jsonify(results)
         else:
             return jsonify({'error': 'No entry matching this id'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-@app.route('/update/Expedition/<int:expedition_id>', methods=['PUT'])
-def updateExpedition_data(expedition_id):
+    
+@app.route('/getDive/<int:id>', methods=['GET'])
+@login_required
+def get_by_id_dive(id):
     try:
         
-        data = request.json
         connection = pyodbc.connect(connectionString)
+        
         cursor = connection.cursor()
-        # Check if expedition_id exists in the database
-        cursor.execute("SELECT COUNT(*) FROM Expedition WHERE ExpeditionID = ?", (expedition_id))
-        row_count = cursor.fetchone()[0]
-        if row_count == 0:
-            return jsonify({'error': 'Invalid expedition_id '}), 400
         
+        select_query = f"SELECT * FROM Dive WHERE DiveID = ? "
+        cursor.execute(select_query, id)
         
-        columns = []
-        valueForColumn = []
-
-        #Go Through json body(data) and append column name and the column updated data
-        for colName, newValue in data.items():
-            # Same as DatetimeGMT = ?
-            columns.append(f"{colName} = ?")
-            valueForColumn.append(newValue)
-
-        valueForColumn.append(expedition_id)
-        columnsToUpdate = ","
-        columnsToUpdate = columnsToUpdate.join(columns)
-
-        # Construct the update query dynamically
-        update_query = f"UPDATE Expedition SET {columnsToUpdate} WHERE ExpeditionID = ?"
-
-        cursor.execute(update_query, valueForColumn)
-        connection.commit()
-
+        columns = [column[0] for column in cursor.description]
+        results = []
+        rows = cursor.fetchall()
         cursor.close()
         connection.close()
+        if rows:
+            for row in rows:
+                results.append(dict(zip(columns, row)))   
+            return jsonify(results)
+        else:
+            return jsonify({'error': 'No entry matching this id'})
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
-        return jsonify({'message': ' Expedition Table Data updated successfully'}), 200
+@app.route('/get/<string:table>/<int:id>', methods=['GET'])
+@login_required
+def get_by_id(table,id):
+    try:
+        columnName = table + 'id'
+        
+        connection = pyodbc.connect(connectionString)
+        
+        cursor = connection.cursor()
+        
+        select_query = f'SELECT * FROM {table} WHERE {columnName} = ? '
+        cursor.execute(select_query, id)
+        
+        columns = [column[0] for column in cursor.description]
+        results = []
+        rows = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        if rows:
+            for row in rows:
+                results.append(dict(zip(columns, row)))   
+            return jsonify(results)
+        else:
+            return jsonify({'error': 'No entry matching this id'})
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
-@app.route('/update/Dive/<int:dive_id>', methods=['PUT'])
-def updateDive_data(dive_id):
+
+@app.route('/delete/Dive/<int:dive_id>', methods=['DELETE'])
+@login_required
+def deleteDive_data(dive_id):
     try:
-        
-        data = request.json
         connection = pyodbc.connect(connectionString)
         cursor = connection.cursor()
-
-        # Check if expedition_id exists in the database
-        cursor.execute("SELECT COUNT(*) FROM Dive WHERE DiveID = ?", (dive_id))
-        row_count = cursor.fetchone()[0]
-        if row_count == 0:
-            return jsonify({'error': 'Invalid expedition_id '}), 400
-        
-        
-        columns = []
-        valueForColumn = []
-
-        #Go Through json body(data) and append column name and the column updated data
-        for colName, newValue in data.items():
-            #Same as DatetimeGMT = ?
-            columns.append(f"{colName} = ?")
-            valueForColumn.append(newValue)
-
-        valueForColumn.append(dive_id)
-        columnsToUpdate = ","
-        columnsToUpdate = columnsToUpdate.join(columns)
-
-        update_query = f"UPDATE Dive SET {columnsToUpdate} WHERE DiveID = ?"
-
-        cursor.execute(update_query, valueForColumn)
+        delete_query = f"DELETE FROM Dive WHERE DiveID = ?"
+        cursor.execute(delete_query, (dive_id,))
         connection.commit()
-
         cursor.close()
         connection.close()
-
-        
-        return jsonify({'message': 'Dive table Data updated successfully'}), 200
+        return jsonify({'message': 'Data deleted successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

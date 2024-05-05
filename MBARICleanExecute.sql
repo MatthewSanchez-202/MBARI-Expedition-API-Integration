@@ -1,3 +1,4 @@
+
 create table Admin_BadStillImageURL
 (
     id                   int identity,
@@ -19,7 +20,13 @@ create table Calendar
     UTCOffset smallint
 )
 go
-
+create table Users(
+    userID int IDENTITY(1,1) ,
+    userEmail varchar(40),
+    typeOfUser varchar(10),
+    primary key (userID) 
+)
+go
 create table CamlogData_1988
 (
     DatetimeGMT  datetime not null constraint CK_CamlogData_1988 check (DatetimeGMT IS NOT NULL),
