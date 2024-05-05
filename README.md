@@ -1,5 +1,5 @@
 # MBARI-Expedition-API-Integration
-This is the projectbase for integrating API integration using GraphQL with the existing Monterey Bay Aquarium Research Institute Expedition Database
+This is the codebase for integrating API integration using REST with the existing Monterey Bay Aquarium Research Institute Expedition Database
 
 Steps to run repo on your machine:
 
