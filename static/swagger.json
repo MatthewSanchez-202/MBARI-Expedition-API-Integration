@@ -415,6 +415,33 @@
       }
     }
   },
+  "definitions": {
+    "Expedition": {
+      "type": "object",
+      "properties": {
+        "ExpeditionID": {
+          "type": "integer"
+        },
+        "ShipName": {
+          "type": "string"
+        }
+      }
+    },
+    "Dive": {
+      "type": "object",
+      "properties": {
+        "DiveID": {
+          "type": "integer"
+        },
+        "DiveNumber": {
+          "type": "integer"
+        },
+        "RovName": {
+          "type": "string"
+        }
+      }
+    }
+  },
   "components": {
     "schemas": {
       "Expedition": {
@@ -642,6 +669,7 @@
         "xml": {
           "name": "dive"
         }
+        
       }
     }
   }
