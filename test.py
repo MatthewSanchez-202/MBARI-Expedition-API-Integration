@@ -4,8 +4,8 @@ import json
 BASE_URL = "http://127.0.0.1:5000"
 
 valid_fields = {
-    '/get-all-expeditions': ['ExpeditionID', 'ShipName'],
-    '/get-all-dives': ['DiveID', 'RovName', 'DiveStartDtg', 'DiveNumber']
+    '/get-all-expeditions': ['ExpeditionID', 'ShipName', 'StartDtg', 'EndDtg'],
+    '/get-all-dives': ['DiveID', 'RovName', 'DiveStartDtg', 'DiveEndDtg', 'DiveNumber']
 }
 valid_orders = ['asc', 'desc']
 # parametrize testing with diffrent values
@@ -15,11 +15,19 @@ valid_orders = ['asc', 'desc']
     ('/get-all-expeditions', 'ShipName', 'asc'),
     ('/get-all-expeditions', 'ShipName', 'desc'),
     ('/get-all-expeditions', 'InvalidField', 'asc'),
+    ('/get-all-expeditions', 'StartDate', 'asc'),
+    ('/get-all-expeditions', 'StartDate', 'desc'),
+    ('/get-all-expeditions', 'EndDate', 'asc'),
+    ('/get-all-expeditions', 'EndDate', 'desc'),
     ('/get-all-expeditions', 'ShipName', 'InvalidOrder'),
     ('/get-all-dives', 'DiveID', 'asc'),
     ('/get-all-dives', 'DiveID', 'desc'),
     ('/get-all-dives', 'RovName', 'asc'),
     ('/get-all-dives', 'RovName', 'desc'),
+    ('/get-all-dives', 'DiveStartDtg', 'asc'),
+    ('/get-all-dives', 'DiveStartDtg', 'desc'),
+    ('/get-all-dives', 'DiveEndDtg', 'asc'),
+    ('/get-all-dives', 'DiveEndDtg', 'desc'),
     ('/get-all-dives', 'InvalidField', 'asc'),
     ('/get-all-dives', 'DiveID', 'InvalidOrder')
 ])
