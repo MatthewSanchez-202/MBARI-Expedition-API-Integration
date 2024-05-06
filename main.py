@@ -487,5 +487,20 @@ def deleteDive_data(dive_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route("/delete/Expedition/<int:expedition_id>", methods=["DELETE"])
+@login_required
+def delete_expedition_data(expedition_id):
+    try:
+        connection = pyodbc.connect(connectionString)
+        cursor = connection.cursor()
+        delete_query = "DELETE FROM Expedition WHERE ExpeditionID = ?"
+        cursor.execute(delete_query, (expedition_id,))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return jsonify({'message': 'Data deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
