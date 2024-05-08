@@ -139,27 +139,44 @@ class User(UserMixin):
 
     
 @app.route('/get-all-expeditions', methods=['GET'])
-@login_required
 def get_all_expeditions():
-
-    # filtering sort order and sort field 
     sort_field = request.args.get('sortfield', default='ExpeditionID', type=str)
     sort_order = request.args.get('sortorder', default='asc', type=str).upper()
+    ship_name = request.args.get('shipname', default=None)
+    start_date = request.args.get('startdate', default=None)
+    end_date = request.args.get('enddate', default=None)
+    year = request.args.get('year', default=None)
 
-    valid_sort_fields = ['ExpeditionID', 'ShipName']
+    valid_sort_fields = ['ExpeditionID', 'ShipName','StartDtg', 'EndDtg']
     if sort_field not in valid_sort_fields:
         return jsonify({'error': 'Invalid sort field'}), 400
-
     if sort_order not in ['ASC', 'DESC']:
         return jsonify({'error': 'Invalid sort order'}), 400
+
+    conditions = []
+    if ship_name:
+        conditions.append(f"ShipName = '{ship_name}'")
+
+    if year:
+        
+        conditions.append(f"(YEAR(StartDtg) = {year} OR YEAR(EndDtg) = {year})")
+    else:
+        
+        if start_date:
+            conditions.append(f"StartDtg >= '{start_date}'")
+        if end_date:
+            conditions.append(f"EndDtg <= '{end_date}'")
+
+    query = "SELECT * FROM Expedition"
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+    query += f" ORDER BY [{sort_field}] {sort_order}"
 
     try:
         with pyodbc.connect(connectionString) as conn:
             cursor = conn.cursor()
-            query = f"SELECT * FROM Expedition ORDER BY [{sort_field}] {sort_order}"
             cursor.execute(query)
             rows = cursor.fetchall()
-
             columns = [column[0] for column in cursor.description]
             expeditions = [dict(zip(columns, row)) for row in rows]
             return jsonify(expeditions)
@@ -170,30 +187,52 @@ def get_all_expeditions():
 
  # filtering sort order and sort field 
 @app.route('/get-all-dives', methods=['GET'])
-@login_required
 def get_all_dives():
     sort_field = request.args.get('sortfield', default='DiveID', type=str)
     sort_order = request.args.get('sortorder', default='asc', type=str).upper()
+    rov_name = request.args.get('rovname', default=None)
+    start_date = request.args.get('startdate', default=None)
+    end_date = request.args.get('enddate', default=None)
+    year = request.args.get('year', default=None)  
 
-    valid_sort_fields = ['DiveID', 'DiveStartDtg', 'DiveNumber', 'RovName']
+    valid_sort_fields = ['DiveID', 'DiveStartDtg', 'DiveEndDtg' , 'DiveNumber', 'RovName']
     if sort_field not in valid_sort_fields:
         return jsonify({'error': 'Invalid sort field'}), 400
-
     if sort_order not in ['ASC', 'DESC']:
         return jsonify({'error': 'Invalid sort order'}), 400
+
+    conditions = []
+    if rov_name:
+        conditions.append(f"RovName = '{rov_name}'")
+
+    
+    if year:
+        start_year_date = f"{year}-01-01"
+        end_year_date = f"{year}-12-31"
+        conditions.append(f"DiveStartDtg >= '{start_year_date}'")
+        conditions.append(f"DiveEndDtg <= '{end_year_date}'")
+    else:
+        if start_date:
+            conditions.append(f"DiveStartDtg >= '{start_date}'")
+        if end_date:
+            conditions.append(f"DiveEndDtg <= '{end_date}'")
+
+    query = "SELECT * FROM Dive"
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+    query += f" ORDER BY [{sort_field}] {sort_order}"
 
     try:
         with pyodbc.connect(connectionString) as conn:
             cursor = conn.cursor()
-            query = f"SELECT * FROM Dive ORDER BY [{sort_field}] {sort_order}"
             cursor.execute(query)
             rows = cursor.fetchall()
-
             columns = [column[0] for column in cursor.description]
             dives = [dict(zip(columns, row)) for row in rows]
             return jsonify(dives)
     except Exception as e:
         return jsonify({'error': 'Internal server error'}), 500
+
 
 @app.route("/post/newUser", methods=['POST'])
 @login_required
