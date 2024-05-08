@@ -16,9 +16,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 SERVER = 'localhost'
-DATABASE = 'YOUR DB'
+DATABASE = 'MBARI'
 USERNAME = 'SA'
-PASSWORD = 'PASSWORD'
+PASSWORD = 'Santano831!'
 URL = "http://127.0.0.1:5000"
 # Define the connection string
 connectionString = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={SERVER};DATABASE={DATABASE};UID={USERNAME};PWD={PASSWORD};'
@@ -75,6 +75,26 @@ def isAuthorized_dec(func):
         return "Not Authorized"
     
     return wrapper_func
+
+@app.route('/testIn')
+def test_login():
+    session['user'] = 'admin'
+    connection = pyodbc.connect(connectionString)
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM Users WHERE userEmail = ?", (str(session['user'])))
+    user_data = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    user = User(user_data[0] , user_data[1] ,user_data[2]) 
+    login_user(user)
+    return jsonify("Logged In"), 200
+
+@app.route('/testOut')
+@login_required
+def test_logout():
+    logout_user()
+    session.pop('user', None)
+    return jsonify("Logged Out"), 200
 
 
 @app.route('/')
