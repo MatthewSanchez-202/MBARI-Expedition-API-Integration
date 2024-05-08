@@ -42,7 +42,9 @@ VALUES (1000, 01, 'Ship1', 10, 'Purpose...', '010101', 'Scientist', 'Investigato
        (1001, 02, 'Ship2', 20, 'Purpose...', '020202', 'Scientist', 'Investigator', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Equipment...', 'Participants...', 'Region...', 'Track...', '2024-03-30 12:00:00', '2025-03-30 12:00:00', 'Accomplishments...', 'Comments...', 'Objectivese Met?...' , 'Operator comments...', 'Functioned?...', 'Other...', 'Updated by...', 1);
 
 INSERT INTO Users
-VALUES ('santanofabian@gmail.com' ,'admin');
+VALUES ('santanofabian@gmail.com' ,'admin'),
+       ('admin' ,'admin'),
+       ('user' , 'user');
 SELECT * FROM Admin_BadStillImageURL;
 SELECT * FROM Calendar;
  
