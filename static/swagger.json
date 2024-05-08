@@ -100,30 +100,58 @@
     
     "/get-all-expeditions": {
       "get": {
-        "tags": ["Expedition"],
-        "summary": "List all expeditions",
-        "description": "Retrieve a list of all expeditions with optional sorting.",
+        "tags": ["Expeditions"],
+        "summary": "Retrieve all expeditions",
+        "description": "Returns a list of all expeditions with options to filter by ship name, date range, and sort.",
         "parameters": [
           {
             "name": "sortfield",
             "in": "query",
+            "description": "Field to sort the expeditions by",
             "required": false,
             "type": "string",
-            "default": "ExpeditionID",
-            "description": "Field to sort the expeditions by."
+            "default": "ExpeditionID"
           },
           {
             "name": "sortorder",
             "in": "query",
+            "description": "Order to sort the expeditions (ASC or DESC)",
             "required": false,
             "type": "string",
-            "default": "ASC",
-            "description": "Order to sort the expeditions (ASC or DESC)."
+            "default": "ASC"
+          },
+          {
+            "name": "shipname",
+            "in": "query",
+            "description": "Filter by the ship name involved in the expedition",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "startdate",
+            "in": "query",
+            "description": "Filter by the start date of the expedition (YYYY-MM-DD)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "enddate",
+            "in": "query",
+            "description": "Filter by the end date of the expedition (YYYY-MM-DD)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Filter by year of the expedition",
+            "required": false,
+            "type": "integer"
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful operation",
+            "description": "A list of expeditions",
             "schema": {
               "type": "array",
               "items": {
@@ -132,17 +160,17 @@
             }
           },
           "400": {
-            "description": "Invalid sort field or order"
+            "description": "Invalid input, object invalid"
           },
           "500": {
-            "description": "Server Error"
+            "description": "Internal server error"
           }
         }
       }
     },
     "/get-all-dives": {
       "get": {
-        "tags": ["Dive"],
+        "tags": ["Dives"],
         "summary": "List all dives",
         "description": "Retrieve a list of all dives with optional sorting.",
         "parameters": [
@@ -161,6 +189,34 @@
             "type": "string",
             "default": "ASC",
             "description": "Order to sort the dives (ASC or DESC)."
+          },
+          {
+            "name": "rovname",
+            "in": "query",
+            "description": "Filter by the ROV name involved in the dive",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "startdate",
+            "in": "query",
+            "description": "Filter by the start date of the dive (YYYY-MM-DD)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "enddate",
+            "in": "query",
+            "description": "Filter by the end date of the dive (YYYY-MM-DD)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "Filter by year of the dive",
+            "required": false,
+            "type": "integer"
           }
         ],
         "responses": {
@@ -415,15 +471,24 @@
       }
     }
   },
-  "definitions": {
+ "definitions": {
     "Expedition": {
       "type": "object",
       "properties": {
         "ExpeditionID": {
-          "type": "integer"
+          "type": "integer",
+          "format": "int64"
         },
         "ShipName": {
           "type": "string"
+        },
+        "StartDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "EndDate": {
+          "type": "string",
+          "format": "date"
         }
       }
     },
@@ -431,17 +496,22 @@
       "type": "object",
       "properties": {
         "DiveID": {
-          "type": "integer"
-        },
-        "DiveNumber": {
-          "type": "integer"
+          "type": "integer",
+          "format": "int64"
         },
         "RovName": {
           "type": "string"
+        },
+        "StartDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "EndDate": {
+          "type": "string",
+          "format": "date"
         }
       }
-    }
-  },
+    },
   "components": {
     "schemas": {
       "Expedition": {
