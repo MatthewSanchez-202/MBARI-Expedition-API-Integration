@@ -1,8 +1,8 @@
 import pytest
 import requests
+import json
 
 URL = "http://127.0.0.1:5000"
-import json
 BASE_URL = "http://127.0.0.1:5000"
 
 valid_fields = {
