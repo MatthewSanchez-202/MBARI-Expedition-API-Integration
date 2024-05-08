@@ -124,7 +124,7 @@ def auth():
     connection.close()
     user = User(user_data[0] , user_data[1] ,user_data[2]) 
     login_user(user)
-    redirect_url = url_for('homepage', _external=True) + f'?access_token={token["access_token"]}'
+    redirect_url = url_for('homepage', _external=True) 
     return redirect(redirect_url)
 
 
@@ -159,6 +159,7 @@ class User(UserMixin):
 
     
 @app.route('/get-all-expeditions', methods=['GET'])
+@login_required
 def get_all_expeditions():
     sort_field = request.args.get('sortfield', default='ExpeditionID', type=str)
     sort_order = request.args.get('sortorder', default='asc', type=str).upper()
@@ -207,6 +208,7 @@ def get_all_expeditions():
 
  # filtering sort order and sort field 
 @app.route('/get-all-dives', methods=['GET'])
+@login_required
 def get_all_dives():
     sort_field = request.args.get('sortfield', default='DiveID', type=str)
     sort_order = request.args.get('sortorder', default='asc', type=str).upper()
@@ -255,7 +257,6 @@ def get_all_dives():
 
 
 @app.route("/post/newUser", methods=['POST'])
-@login_required
 def create_user():
     try:
         data = request.json
@@ -320,6 +321,7 @@ def updateExpedition_data(expedition_id):
         return jsonify({'error': str(e)}), 500
     
 @app.route('/update/Dive/<int:dive_id>', methods=['PUT'])
+@isAuthorized_dec
 @login_required
 def updateDive_data(dive_id):
     try:
@@ -364,6 +366,7 @@ def updateDive_data(dive_id):
 
 # Create Expedition POST API
 @app.route("/post/create_expedition", methods=['POST'])
+@isAuthorized_dec
 @login_required
 def create_Expedition():
     try:
@@ -411,6 +414,7 @@ def create_Expedition():
 
 #Create Dive Post API
 @app.route("/post/create_dive", methods=['POST'])
+@isAuthorized_dec
 @login_required
 def create_dive():
     try:
@@ -449,7 +453,6 @@ def create_dive():
 
 
 @app.route('/getExpedition/<int:id>', methods=['GET'])
-@isAuthorized_dec
 @login_required
 def get_by_id_expedition(id):
     try:
@@ -532,6 +535,7 @@ def get_by_id(table,id):
     
 
 @app.route('/delete/Dive/<int:dive_id>', methods=['DELETE'])
+@isAuthorized_dec
 @login_required
 def deleteDive_data(dive_id):
     try:
@@ -547,6 +551,7 @@ def deleteDive_data(dive_id):
         return jsonify({'error': str(e)}), 500
 
 @app.route("/delete/Expedition/<int:expedition_id>", methods=["DELETE"])
+@isAuthorized_dec
 @login_required
 def delete_expedition_data(expedition_id):
     try:
@@ -560,6 +565,86 @@ def delete_expedition_data(expedition_id):
         return jsonify({'message': 'Data deleted successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
 
+
+@app.route('/get-all-calendar', methods=['GET'])
+@login_required
+def get_all_calendar():
+    try:
+        with pyodbc.connect(connectionString) as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM Calendar')  
+            rows = cursor.fetchall()
+            columns = [column[0] for column in cursor.description]
+            calendar = [dict(zip(columns, row)) for row in rows]
+            return jsonify(calendar)
+    except Exception as e:
+        return jsonify({'error': str(e)})
+@app.route('/get_all_camlogdata', methods=['GET'])
+@login_required
+def get_all_camlogdata():
+    try:
+        with pyodbc.connect(connectionString) as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM  CamlogData_2024')  
+            rows = cursor.fetchall()
+            columns = [column[0] for column in cursor.description]
+            camlog = [dict(zip(columns, row)) for row in rows]
+            return jsonify(camlog)
+    except Exception as e:
+        return jsonify({'error': str(e)})
+@app.route('/get_all_DocRickettsPilotsDive', methods=['GET'])
+@login_required
+def get_all_DocRickettsPilotsDive():
+    try:
+        with pyodbc.connect(connectionString) as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM  DocRickettsPilotsDive')  
+            rows = cursor.fetchall()
+            columns = [column[0] for column in cursor.description]
+            doc1 = [dict(zip(columns, row)) for row in rows]
+            return jsonify(doc1)
+    except Exception as e:
+        return jsonify({'error': str(e)})
+@app.route('/get_all_DocRickettsPilotsDiveStaging', methods=['GET'])
+@login_required
+def get_all_DocRickettsPilotsDiveStaging():
+    try:
+        with pyodbc.connect(connectionString) as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM  DocRickettsPilotsDiveStaging')  
+            rows = cursor.fetchall()
+            columns = [column[0] for column in cursor.description]
+            doc2 = [dict(zip(columns, row)) for row in rows]
+            return jsonify(doc2)
+    except Exception as e:
+        return jsonify({'error': str(e)})
+@app.route('/get_all_DocRickettsRawCtdData_2024', methods=['GET'])
+@login_required
+def get_all_DocRickettsRawCtdData_2024():
+    try:
+        with pyodbc.connect(connectionString) as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM  DocRickettsRawCtdData_2024')  
+            rows = cursor.fetchall()
+            columns = [column[0] for column in cursor.description]
+            doc3 = [dict(zip(columns, row)) for row in rows]
+            return jsonify(doc3)
+    except Exception as e:
+        return jsonify({'error': str(e)})
+@app.route('/adminerror', methods=['GET'])
+@login_required
+def adminerror():
+    try:
+        with pyodbc.connect(connectionString) as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM  Admin_BadStillImageURL')  
+            rows = cursor.fetchall()
+            columns = [column[0] for column in cursor.description]
+            error = [dict(zip(columns, row)) for row in rows]
+            return jsonify(error)
+    except Exception as e:
+        return jsonify({'error': str(e)})
 if __name__ == '__main__':
     app.run(debug=True)
