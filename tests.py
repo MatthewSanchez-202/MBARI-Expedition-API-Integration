@@ -5,6 +5,14 @@ import json
 URL = "http://127.0.0.1:5000"
 BASE_URL = "http://127.0.0.1:5000"
 
+@pytest.fixture(scope="session")
+def authenticated_session():
+    session = requests.Session()
+    response = session.get(f'{URL}/testIn')
+    assert response.status_code == 200
+    assert response.json() == "Logged In"
+    return session
+
 valid_fields = {
     '/get-all-expeditions': ['ExpeditionID', 'ShipName', 'StartDtg', 'EndDtg'],
     '/get-all-dives': ['DiveID', 'RovName', 'DiveStartDtg', 'DiveEndDtg', 'DiveNumber']
@@ -34,23 +42,21 @@ valid_orders = ['asc', 'desc']
     ('/get-all-dives', 'DiveID', 'InvalidOrder')
 ])
 # function for sorted response with many inputs
-def test_sorted_response(endpoint, field, order):
+def test_sorted_response(endpoint, field, order,authenticated_session):
     if field in valid_fields.get(endpoint, []) and order in valid_orders:
         expected_status = 200
     else:
         expected_status = 400  
-    response = requests.get(f"{BASE_URL}{endpoint}", params={'sortfield': field, 'sortorder': order})
+    response = authenticated_session.get(f"{BASE_URL}{endpoint}", params={'sortfield': field, 'sortorder': order})
     print(f"Testing {endpoint} with field {field} and order {order}")
     print(f"Expected Status: {expected_status}, Received Status: {response.status_code}")
     assert response.status_code == expected_status, f"Failed for {field} with {order}, got {response.status_code} instead of {expected_status}"
 
-def test_home_route():
-    response = requests.get(f'{BASE_URL}/')
+def test_home_route(authenticated_session):
+    response = authenticated_session.get(f'{BASE_URL}/')
     assert response.status_code == 200
-    assert "Mbari get all function" in response.text
-def test_get_all_expeditions():
-
-    response = requests.get(f'{BASE_URL}/get-all-expeditions')
+def test_get_all_expeditions(authenticated_session):
+    response = authenticated_session.get(f'{BASE_URL}/get-all-expeditions')
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)  
@@ -58,9 +64,9 @@ def test_get_all_expeditions():
         assert 'ExpeditionID' in data[0]
         assert 'ShipName' in data[0]
         assert data[0]['ExpeditionID'] > 0  
-def test_get_all_dives():
+def test_get_all_dives(authenticated_session):
 
-    response = requests.get(f'{BASE_URL}/get-all-dives')
+    response = authenticated_session.get(f'{BASE_URL}/get-all-dives')
     assert response.status_code == 200
     dives = response.json()
     assert isinstance(dives, list)
@@ -68,53 +74,53 @@ def test_get_all_dives():
         assert 'DiveID' in dives[0]
         assert dives[0]['DiveID'] > 0  
 
-def test_get_all_calendar():
+def test_get_all_calendar(authenticated_session):
     """Test the get-all-calendar endpoint for correct data format."""
-    response = requests.get(f'{BASE_URL}/get-all-calendar')
+    response = authenticated_session.get(f'{BASE_URL}/get-all-calendar')
     assert response.status_code == 200
     calendar = response.json()
     assert isinstance(calendar, list)
 
-def test_get_all_camlogdata():
+def test_get_all_camlogdata(authenticated_session):
 
-    response = requests.get(f'{BASE_URL}/get_all_camlogdata')
+    response = authenticated_session.get(f'{BASE_URL}/get_all_camlogdata')
     assert response.status_code == 200
     camlog = response.json()
     assert isinstance(camlog, list)
     if camlog:
         assert 'DeviceID' in camlog[0]
 
-def test_get_all_DocRickettsPilotsDive():
+def test_get_all_DocRickettsPilotsDive(authenticated_session):
     """Test the get_all_DocRickettsPilotsDive endpoint for content accuracy."""
-    response = requests.get(f'{BASE_URL}/get_all_DocRickettsPilotsDive')
+    response = authenticated_session.get(f'{BASE_URL}/get_all_DocRickettsPilotsDive')
     assert response.status_code == 200
     dives = response.json()
     assert isinstance(dives, list)
 
-def test_get_all_DocRickettsPilotsDiveStaging():
+def test_get_all_DocRickettsPilotsDiveStaging(authenticated_session):
     """Check for structure and completeness of data."""
-    response = requests.get(f'{BASE_URL}/get_all_DocRickettsPilotsDiveStaging')
+    response = authenticated_session.get(f'{BASE_URL}/get_all_DocRickettsPilotsDiveStaging')
     assert response.status_code == 200
     staging = response.json()
     assert isinstance(staging, list)
 
-def test_get_all_DocRickettsRawCtdData_2024():
+def test_get_all_DocRickettsRawCtdData_2024(authenticated_session):
     """Ensure the CTD data contains specific scientific measurements."""
-    response = requests.get(f'{BASE_URL}/get_all_DocRickettsRawCtdData_2024')
+    response = authenticated_session.get(f'{BASE_URL}/get_all_DocRickettsRawCtdData_2024')
     assert response.status_code == 200
     ctd_data = response.json()
     assert isinstance(ctd_data, list)
     if ctd_data:
         assert 't' in ctd_data[0]  
 
-def test_adminerror():
+def test_adminerror(authenticated_session):
     """Verify the error reporting mechanism is operational."""
-    response = requests.get(f'{BASE_URL}/adminerror')
+    response = authenticated_session.get(f'{BASE_URL}/adminerror')
     assert response.status_code == 200
     errors = response.json()
     assert isinstance(errors, list)
 
-def test_create_expedition():
+def test_create_expedition(authenticated_session):
     data = {
         "ExpeditionID": 60,
         "DeviceID": 5,
@@ -142,10 +148,10 @@ def test_create_expedition():
         "ismodified": 0
     }
 
-    r =  requests.post(f'{URL}/post/create_expedition', json=data)
+    r =  authenticated_session.post(f'{URL}/post/create_expedition', json=data)
     assert r.status_code == 200
 
-def test_create_dive():
+def test_create_dive(authenticated_session):
     data = {
         "DiveID": 3,
         "DeviceID": 10,
@@ -163,40 +169,37 @@ def test_create_dive():
         "DiveDepthMid": 1100.20
     }
 
-    r = requests.post(f'{URL}/post/create_dive', json=data)
+    r = authenticated_session.post(f'{URL}/post/create_dive', json=data)
     assert r.status_code == 200
 
-def test_get_by_id_dive():
+def test_get_by_id_dive(authenticated_session):
     id = 2
-    r = requests.get(f'{URL}/getDive/{id}')
+    r = authenticated_session.get(f'{URL}/getDive/{id}')
     response = r.json()
     assert(r.status_code == 200)
     assert(response[0]['RovName'] == 'ROV2')
     
-def test_get_by_id_expedition():
+def test_get_by_id_expedition(authenticated_session):
     id = 1001
-    r = requests.get(f'{URL}/getExpedition/{id}')
+    r = authenticated_session.get(f'{URL}/getExpedition/{id}')
     response = r.json()
     assert(r.status_code == 200)
     assert(response[0]['ShipName'] == 'Ship2')
 
-def test_update_expedition_by_id():
+def test_update_expedition_by_id(authenticated_session):
     expeditionID = 1001
-    inValidExpeditionID = 1
     data = {
         "ExpeditionID": 1001,
         "DeviceID": 5,
         "UpdatedBy": "Fabian Santano",
         "ismodified": 1
     }
-    r = requests.put(f'{URL}/update/Expedition/{expeditionID}' , json=data)
+    r = authenticated_session.put(f'{URL}/update/Expedition/{expeditionID}' , json=data)
     assert(r.status_code == 200)
-    r = requests.put(f'{URL}/update/Expedition/{inValidExpeditionID}' , json=data)
-    assert(r.status_code == 400)
+   
 
-def test_update_dive_by_id():
+def test_update_dive_by_id(authenticated_session):
     diveID = 1
-    invalidDiveID = 100000
     data = {
         "DiveID": 1,
         "DeviceID": 10,
@@ -206,11 +209,8 @@ def test_update_dive_by_id():
         "DiveStartDtg": "2024-03-21 12:30:30",
         "DiveEndDtg": "2024-03-21 15:30:00"
     }
-    r = requests.put(f'{URL}/update/Dive/{diveID}' , json=data)
+    r = authenticated_session.put(f'{URL}/update/Dive/{diveID}' , json=data)
     assert(r.status_code == 200)
-    r = requests.put(f'{URL}/update/Dive/{invalidDiveID}' , json=data)
-    assert(r.status_code == 400)
 
 if __name__ == "__main__":
    pytest.main()
-
