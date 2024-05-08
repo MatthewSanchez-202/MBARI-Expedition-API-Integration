@@ -24,6 +24,12 @@
   ],
   "tags": [
     {
+      "name": "Login",
+      "description": "Test Login to test Swagger"
+
+    },
+
+    {
       "name": "Expedition",
       "description": "Information about MBARI Expedition"
     },
@@ -33,6 +39,32 @@
     }
   ],
   "paths": {
+    "/testIn": {
+      "get": {
+          "tags": [
+              "Login"
+          ],
+          "summary": " Login to test  ",
+          "responses" : {
+              "200": {
+                "description": "Successful operation"
+              }
+            }
+      }
+    },
+    "/testOut": {
+      "get": {
+          "tags": [
+              "Login"
+          ],
+          "summary": " Log out of  ",
+          "responses" : {
+              "200": {
+                "description": "Successful operation"
+              }
+            }
+      }
+    },
     "/get/Expedition/{expedition_id}": {
       "get": {
           "tags": [
@@ -100,7 +132,7 @@
     
     "/get-all-expeditions": {
       "get": {
-        "tags": ["Expeditions"],
+        "tags": ["Expedition"],
         "summary": "Retrieve all expeditions",
         "description": "Returns a list of all expeditions with options to filter by ship name, date range, and sort.",
         "parameters": [
@@ -170,7 +202,7 @@
     },
     "/get-all-dives": {
       "get": {
-        "tags": ["Dives"],
+        "tags": ["Dive"],
         "summary": "List all dives",
         "description": "Retrieve a list of all dives with optional sorting.",
         "parameters": [
@@ -743,4 +775,5 @@
       }
     }
   }
+}
 }
