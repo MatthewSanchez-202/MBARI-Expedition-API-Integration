@@ -1,4 +1,5 @@
-
+-- Database to use
+USE MBARI;
 -- Test data for Admin_BadStillImageURL
 INSERT INTO Admin_BadStillImageURL (ExpeditiondDataID_FK, ExpeditionID, HtmlError, URL)
 VALUES (1, 1001, '404 Not Found', 'http://example.com/image1.jpg'),
